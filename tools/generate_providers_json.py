@@ -221,6 +221,90 @@ PROVIDERS_DATA = [
         "type": "webopac",
         "portal_url": "https://www.pl.gov.my",
         "description": "Federal Territory of Labuan public library corporation."
+    },
+    {
+        "code": "u-pustaka",
+        "name": "u-Pustaka",
+        "english_name": "u-Pustaka National Information Hub & Consortium",
+        "category": "national_consortium",
+        "state": "National Consortium (Malaysia)",
+        "flag": "🇲🇾",
+        "engine": "Union Gateway",
+        "type": "union",
+        "portal_url": "https://www.u-pustaka.gov.my/",
+        "description": "National digital library and public library consortium gateway under Perpustakaan Negara Malaysia."
+    },
+    {
+        "code": "malcat",
+        "name": "MALCat (Malaysian Academic Library Union Catalog)",
+        "english_name": "Malaysian Academic Library Union Catalog",
+        "category": "academic_union",
+        "state": "National Academic (PERPUN / JKPUA)",
+        "flag": "🎓🇲🇾",
+        "engine": "Union Gateway",
+        "type": "webopac",
+        "portal_url": "https://perpun.upm.edu.my",
+        "description": "Union catalog of Malaysian public and research universities managed by PERPUN / JKPUA."
+    },
+    {
+        "code": "um",
+        "name": "Universiti Malaya (UM)",
+        "english_name": "University of Malaya Library",
+        "category": "academic",
+        "state": "W.P. Kuala Lumpur",
+        "flag": "🔵🟡",
+        "engine": "WebOPAC",
+        "type": "webopac",
+        "portal_url": "https://pendeta.um.edu.my",
+        "description": "Perpustakaan Universiti Malaya (Pendeta Discovery), comprehensive academic and heritage repository."
+    },
+    {
+        "code": "ukm",
+        "name": "Universiti Kebangsaan Malaysia (UKM)",
+        "english_name": "National University of Malaysia - Tun Seri Lanang Library",
+        "category": "academic",
+        "state": "Selangor",
+        "flag": "🔴🔵🟡",
+        "engine": "WebOPAC",
+        "type": "webopac",
+        "portal_url": "https://gemilang.ukm.my",
+        "description": "Perpustakaan Tun Seri Lanang UKM, premier national research and Malay studies collection."
+    },
+    {
+        "code": "uitm",
+        "name": "Universiti Teknologi MARA (UiTM)",
+        "english_name": "UiTM - Tun Abdul Razak Library (PTAR)",
+        "category": "academic",
+        "state": "Selangor",
+        "flag": "🟣🟡",
+        "engine": "WebOPAC",
+        "type": "webopac",
+        "portal_url": "https://ptar.uitm.edu.my",
+        "description": "Perpustakaan Tun Abdul Razak (PTAR), largest university library network across Malaysia."
+    },
+    {
+        "code": "upsi",
+        "name": "Universiti Pendidikan Sultan Idris (UPSI)",
+        "english_name": "Sultan Idris Education University - Tuanku Bainun Library",
+        "category": "academic",
+        "state": "Perak",
+        "flag": "🔵🟡🔴",
+        "engine": "WebOPAC",
+        "type": "webopac",
+        "portal_url": "https://pustaka.upsi.edu.my",
+        "description": "Perpustakaan Tuanku Bainun UPSI, specialized in education, school pedagogy, and children's literature."
+    },
+    {
+        "code": "dbp",
+        "name": "Dewan Bahasa dan Pustaka (DBP)",
+        "english_name": "Institute of Language and Literature Library",
+        "category": "special_heritage",
+        "state": "W.P. Kuala Lumpur",
+        "flag": "🔵🔴",
+        "engine": "WebOPAC",
+        "type": "webopac",
+        "portal_url": "https://dbp.gov.my",
+        "description": "Perpustakaan DBP, the definitive repository for Malay language, literature, and lexicography."
     }
 ]
 

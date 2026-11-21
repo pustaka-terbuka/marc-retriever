@@ -371,6 +371,13 @@
             <option value="pkl">🔴⚪🔵 PKL - Perpustakaan Kuala Lumpur (W.P. Kuala Lumpur)</option>
             <option value="ppj">🟡🔵🔴 PPJ - Perpustakaan Awam Putrajaya (W.P. Putrajaya)</option>
             <option value="ppl">🔴⚪🔵 PPL - Perpustakaan Awam Perbadanan Labuan (W.P. Labuan)</option>
+            <option value="u-pustaka">🇲🇾 U-PUSTAKA - u-Pustaka (National Consortium (Malaysia))</option>
+            <option value="malcat">🎓🇲🇾 MALCAT - MALCat (National Academic (PERPUN))</option>
+            <option value="um">🔵🟡 UM - Universiti Malaya (W.P. Kuala Lumpur)</option>
+            <option value="ukm">🔴🔵🟡 UKM - Universiti Kebangsaan Malaysia (Selangor)</option>
+            <option value="uitm">🟣🟡 UITM - Universiti Teknologi MARA (Selangor)</option>
+            <option value="upsi">🔵🟡🔴 UPSI - Universiti Pendidikan Sultan Idris (Perak)</option>
+            <option value="dbp">🔵🔴 DBP - Dewan Bahasa dan Pustaka (W.P. Kuala Lumpur)</option>
         </select>
       </div>
       <div class="input-wrapper">
@@ -634,11 +641,102 @@
           GET ./ppl?isbn=9789831665541 &rarr;
         </a>
       </div>
+      <!-- U-PUSTAKA Card -->
+      <div class="lib-card">
+        <div class="lib-card-header">
+          <span class="lib-code">/u-pustaka</span>
+          <span class="status-pill status-active">Active</span>
+        </div>
+        <div class="lib-name">🇲🇾 u-Pustaka</div>
+        <div class="lib-state-engine"><span>National Consortium (Malaysia)</span> &bull; <code>Union Gateway</code></div>
+        <div class="lib-desc">National digital library and public library consortium gateway under PNM.</div>
+        <a class="lib-endpoint" href="./u-pustaka?isbn=9789831665541">
+          GET ./u-pustaka?isbn=9789831665541 &rarr;
+        </a>
+      </div>
+      <!-- MALCAT Card -->
+      <div class="lib-card">
+        <div class="lib-card-header">
+          <span class="lib-code">/malcat</span>
+          <span class="status-pill status-active">Active</span>
+        </div>
+        <div class="lib-name">🎓🇲🇾 MALCat</div>
+        <div class="lib-state-engine"><span>National Academic (PERPUN)</span> &bull; <code>Union Gateway</code></div>
+        <div class="lib-desc">Malaysian Academic Library Union Catalog uniting higher education institutions.</div>
+        <a class="lib-endpoint" href="./malcat?isbn=9789831665541">
+          GET ./malcat?isbn=9789831665541 &rarr;
+        </a>
+      </div>
+      <!-- UM Card -->
+      <div class="lib-card">
+        <div class="lib-card-header">
+          <span class="lib-code">/um</span>
+          <span class="status-pill status-active">Active</span>
+        </div>
+        <div class="lib-name">🔵🟡 Universiti Malaya</div>
+        <div class="lib-state-engine"><span>W.P. Kuala Lumpur</span> &bull; <code>WebOPAC</code></div>
+        <div class="lib-desc">Perpustakaan Universiti Malaya (Pendeta Discovery) academic collections.</div>
+        <a class="lib-endpoint" href="./um?isbn=9789831665541">
+          GET ./um?isbn=9789831665541 &rarr;
+        </a>
+      </div>
+      <!-- UKM Card -->
+      <div class="lib-card">
+        <div class="lib-card-header">
+          <span class="lib-code">/ukm</span>
+          <span class="status-pill status-active">Active</span>
+        </div>
+        <div class="lib-name">🔴🔵🟡 Universiti Kebangsaan Malaysia</div>
+        <div class="lib-state-engine"><span>Selangor</span> &bull; <code>WebOPAC</code></div>
+        <div class="lib-desc">Perpustakaan Tun Seri Lanang UKM premier research repository.</div>
+        <a class="lib-endpoint" href="./ukm?isbn=9789831665541">
+          GET ./ukm?isbn=9789831665541 &rarr;
+        </a>
+      </div>
+      <!-- UITM Card -->
+      <div class="lib-card">
+        <div class="lib-card-header">
+          <span class="lib-code">/uitm</span>
+          <span class="status-pill status-active">Active</span>
+        </div>
+        <div class="lib-name">🟣🟡 Universiti Teknologi MARA</div>
+        <div class="lib-state-engine"><span>Selangor</span> &bull; <code>WebOPAC</code></div>
+        <div class="lib-desc">Perpustakaan Tun Abdul Razak (PTAR) nationwide university library network.</div>
+        <a class="lib-endpoint" href="./uitm?isbn=9789831665541">
+          GET ./uitm?isbn=9789831665541 &rarr;
+        </a>
+      </div>
+      <!-- UPSI Card -->
+      <div class="lib-card">
+        <div class="lib-card-header">
+          <span class="lib-code">/upsi</span>
+          <span class="status-pill status-active">Active</span>
+        </div>
+        <div class="lib-name">🔵🟡🔴 Universiti Pendidikan Sultan Idris</div>
+        <div class="lib-state-engine"><span>Perak</span> &bull; <code>WebOPAC</code></div>
+        <div class="lib-desc">Perpustakaan Tuanku Bainun UPSI education and school pedagogy collection.</div>
+        <a class="lib-endpoint" href="./upsi?isbn=9789831665541">
+          GET ./upsi?isbn=9789831665541 &rarr;
+        </a>
+      </div>
+      <!-- DBP Card -->
+      <div class="lib-card">
+        <div class="lib-card-header">
+          <span class="lib-code">/dbp</span>
+          <span class="status-pill status-active">Active</span>
+        </div>
+        <div class="lib-name">🔵🔴 Dewan Bahasa dan Pustaka</div>
+        <div class="lib-state-engine"><span>W.P. Kuala Lumpur</span> &bull; <code>WebOPAC</code></div>
+        <div class="lib-desc">Perpustakaan DBP national Malay language and literature archives.</div>
+        <a class="lib-endpoint" href="./dbp?isbn=9789831665541">
+          GET ./dbp?isbn=9789831665541 &rarr;
+        </a>
+      </div>
   </div>
 
   <div class="docs-card">
     <h2>📖 Universal URL Query String API</h2>
-    <p>Retrieve MARC records for any supported Malaysian public library using the clean path format <code>/ppl?isbn=&lt;ISBN&gt;</code>:</p>
+    <p>Retrieve MARC records for any supported Malaysian public library using the clean path format <code>/dbp?isbn=&lt;ISBN&gt;</code>:</p>
     
     <div class="endpoint-box">
       <div>

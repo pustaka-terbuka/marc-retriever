@@ -20,7 +20,14 @@ LIBRARIES = [
     ("pns", "Perpustakaan Negeri Sabah", "Sabah", "🔵⚪🔴", "WebOPAC", "Sabah state library network and North Borneo collections."),
     ("pkl", "Perpustakaan Kuala Lumpur", "W.P. Kuala Lumpur", "🔴⚪🔵", "WebOPAC", "Kuala Lumpur metropolitan public library system under DBKL."),
     ("ppj", "Perpustakaan Awam Putrajaya", "W.P. Putrajaya", "🟡🔵🔴", "WebOPAC", "Putrajaya administrative federal territory public library."),
-    ("ppl", "Perpustakaan Awam Perbadanan Labuan", "W.P. Labuan", "🔴⚪🔵", "WebOPAC", "Federal Territory of Labuan public library corporation.")
+    ("ppl", "Perpustakaan Awam Perbadanan Labuan", "W.P. Labuan", "🔴⚪🔵", "WebOPAC", "Federal Territory of Labuan public library corporation."),
+    ("u-pustaka", "u-Pustaka", "National Consortium (Malaysia)", "🇲🇾", "Union Gateway", "National digital library and public library consortium gateway under PNM."),
+    ("malcat", "MALCat", "National Academic (PERPUN)", "🎓🇲🇾", "Union Gateway", "Malaysian Academic Library Union Catalog uniting higher education institutions."),
+    ("um", "Universiti Malaya", "W.P. Kuala Lumpur", "🔵🟡", "WebOPAC", "Perpustakaan Universiti Malaya (Pendeta Discovery) academic collections."),
+    ("ukm", "Universiti Kebangsaan Malaysia", "Selangor", "🔴🔵🟡", "WebOPAC", "Perpustakaan Tun Seri Lanang UKM premier research repository."),
+    ("uitm", "Universiti Teknologi MARA", "Selangor", "🟣🟡", "WebOPAC", "Perpustakaan Tun Abdul Razak (PTAR) nationwide university library network."),
+    ("upsi", "Universiti Pendidikan Sultan Idris", "Perak", "🔵🟡🔴", "WebOPAC", "Perpustakaan Tuanku Bainun UPSI education and school pedagogy collection."),
+    ("dbp", "Dewan Bahasa dan Pustaka", "W.P. Kuala Lumpur", "🔵🔴", "WebOPAC", "Perpustakaan DBP national Malay language and literature archives.")
 ]
 
 select_options = []

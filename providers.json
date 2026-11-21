@@ -7,7 +7,7 @@
   "homepage": "https://pustaka-terbuka.github.io/marc-retriever/",
   "repository": "https://github.com/pustaka-terbuka/marc-retriever",
   "license": "MIT",
-  "total_providers": 18,
+  "total_providers": 25,
   "standards": {
     "protocol": "HTTP GET",
     "query_parameters": {
@@ -411,6 +411,153 @@
         "mrk",
         "xml"
       ]
+    },
+    {
+      "code": "u-pustaka",
+      "name": "u-Pustaka",
+      "english_name": "u-Pustaka National Information Hub & Consortium",
+      "category": "national_consortium",
+      "state": "National Consortium (Malaysia)",
+      "flag": "🇲🇾",
+      "system_engine": "Union Gateway",
+      "status": "active",
+      "portal_url": "https://www.u-pustaka.gov.my/",
+      "description": "National digital library and public library consortium gateway under Perpustakaan Negara Malaysia.",
+      "endpoint": "https://pustaka-terbuka.github.io/marc-retriever/u-pustaka",
+      "url_template": "https://pustaka-terbuka.github.io/marc-retriever/u-pustaka?isbn={isbn}",
+      "raw_url_template": "https://pustaka-terbuka.github.io/marc-retriever/u-pustaka?isbn={isbn}&raw=true",
+      "example_url": "https://pustaka-terbuka.github.io/marc-retriever/u-pustaka?isbn=9789831665541&raw=true",
+      "supported_formats": [
+        "json",
+        "mrk",
+        "xml"
+      ]
+    },
+    {
+      "code": "malcat",
+      "name": "MALCat (Malaysian Academic Library Union Catalog)",
+      "english_name": "Malaysian Academic Library Union Catalog",
+      "category": "academic_union",
+      "state": "National Academic (PERPUN / JKPUA)",
+      "flag": "🎓🇲🇾",
+      "system_engine": "Union Gateway",
+      "status": "active",
+      "portal_url": "https://perpun.upm.edu.my",
+      "description": "Union catalog of Malaysian public and research universities managed by PERPUN / JKPUA.",
+      "endpoint": "https://pustaka-terbuka.github.io/marc-retriever/malcat",
+      "url_template": "https://pustaka-terbuka.github.io/marc-retriever/malcat?isbn={isbn}",
+      "raw_url_template": "https://pustaka-terbuka.github.io/marc-retriever/malcat?isbn={isbn}&raw=true",
+      "example_url": "https://pustaka-terbuka.github.io/marc-retriever/malcat?isbn=9789831665541&raw=true",
+      "supported_formats": [
+        "json",
+        "mrk",
+        "xml"
+      ]
+    },
+    {
+      "code": "um",
+      "name": "Universiti Malaya (UM)",
+      "english_name": "University of Malaya Library",
+      "category": "academic",
+      "state": "W.P. Kuala Lumpur",
+      "flag": "🔵🟡",
+      "system_engine": "WebOPAC",
+      "status": "active",
+      "portal_url": "https://pendeta.um.edu.my",
+      "description": "Perpustakaan Universiti Malaya (Pendeta Discovery), comprehensive academic and heritage repository.",
+      "endpoint": "https://pustaka-terbuka.github.io/marc-retriever/um",
+      "url_template": "https://pustaka-terbuka.github.io/marc-retriever/um?isbn={isbn}",
+      "raw_url_template": "https://pustaka-terbuka.github.io/marc-retriever/um?isbn={isbn}&raw=true",
+      "example_url": "https://pustaka-terbuka.github.io/marc-retriever/um?isbn=9789831665541&raw=true",
+      "supported_formats": [
+        "json",
+        "mrk",
+        "xml"
+      ]
+    },
+    {
+      "code": "ukm",
+      "name": "Universiti Kebangsaan Malaysia (UKM)",
+      "english_name": "National University of Malaysia - Tun Seri Lanang Library",
+      "category": "academic",
+      "state": "Selangor",
+      "flag": "🔴🔵🟡",
+      "system_engine": "WebOPAC",
+      "status": "active",
+      "portal_url": "https://gemilang.ukm.my",
+      "description": "Perpustakaan Tun Seri Lanang UKM, premier national research and Malay studies collection.",
+      "endpoint": "https://pustaka-terbuka.github.io/marc-retriever/ukm",
+      "url_template": "https://pustaka-terbuka.github.io/marc-retriever/ukm?isbn={isbn}",
+      "raw_url_template": "https://pustaka-terbuka.github.io/marc-retriever/ukm?isbn={isbn}&raw=true",
+      "example_url": "https://pustaka-terbuka.github.io/marc-retriever/ukm?isbn=9789831665541&raw=true",
+      "supported_formats": [
+        "json",
+        "mrk",
+        "xml"
+      ]
+    },
+    {
+      "code": "uitm",
+      "name": "Universiti Teknologi MARA (UiTM)",
+      "english_name": "UiTM - Tun Abdul Razak Library (PTAR)",
+      "category": "academic",
+      "state": "Selangor",
+      "flag": "🟣🟡",
+      "system_engine": "WebOPAC",
+      "status": "active",
+      "portal_url": "https://ptar.uitm.edu.my",
+      "description": "Perpustakaan Tun Abdul Razak (PTAR), largest university library network across Malaysia.",
+      "endpoint": "https://pustaka-terbuka.github.io/marc-retriever/uitm",
+      "url_template": "https://pustaka-terbuka.github.io/marc-retriever/uitm?isbn={isbn}",
+      "raw_url_template": "https://pustaka-terbuka.github.io/marc-retriever/uitm?isbn={isbn}&raw=true",
+      "example_url": "https://pustaka-terbuka.github.io/marc-retriever/uitm?isbn=9789831665541&raw=true",
+      "supported_formats": [
+        "json",
+        "mrk",
+        "xml"
+      ]
+    },
+    {
+      "code": "upsi",
+      "name": "Universiti Pendidikan Sultan Idris (UPSI)",
+      "english_name": "Sultan Idris Education University - Tuanku Bainun Library",
+      "category": "academic",
+      "state": "Perak",
+      "flag": "🔵🟡🔴",
+      "system_engine": "WebOPAC",
+      "status": "active",
+      "portal_url": "https://pustaka.upsi.edu.my",
+      "description": "Perpustakaan Tuanku Bainun UPSI, specialized in education, school pedagogy, and children's literature.",
+      "endpoint": "https://pustaka-terbuka.github.io/marc-retriever/upsi",
+      "url_template": "https://pustaka-terbuka.github.io/marc-retriever/upsi?isbn={isbn}",
+      "raw_url_template": "https://pustaka-terbuka.github.io/marc-retriever/upsi?isbn={isbn}&raw=true",
+      "example_url": "https://pustaka-terbuka.github.io/marc-retriever/upsi?isbn=9789831665541&raw=true",
+      "supported_formats": [
+        "json",
+        "mrk",
+        "xml"
+      ]
+    },
+    {
+      "code": "dbp",
+      "name": "Dewan Bahasa dan Pustaka (DBP)",
+      "english_name": "Institute of Language and Literature Library",
+      "category": "special_heritage",
+      "state": "W.P. Kuala Lumpur",
+      "flag": "🔵🔴",
+      "system_engine": "WebOPAC",
+      "status": "active",
+      "portal_url": "https://dbp.gov.my",
+      "description": "Perpustakaan DBP, the definitive repository for Malay language, literature, and lexicography.",
+      "endpoint": "https://pustaka-terbuka.github.io/marc-retriever/dbp",
+      "url_template": "https://pustaka-terbuka.github.io/marc-retriever/dbp?isbn={isbn}",
+      "raw_url_template": "https://pustaka-terbuka.github.io/marc-retriever/dbp?isbn={isbn}&raw=true",
+      "example_url": "https://pustaka-terbuka.github.io/marc-retriever/dbp?isbn=9789831665541&raw=true",
+      "supported_formats": [
+        "json",
+        "mrk",
+        "xml"
+      ]
     }
   ],
   "by_code": {
@@ -786,6 +933,153 @@
       "url_template": "https://pustaka-terbuka.github.io/marc-retriever/ppl?isbn={isbn}",
       "raw_url_template": "https://pustaka-terbuka.github.io/marc-retriever/ppl?isbn={isbn}&raw=true",
       "example_url": "https://pustaka-terbuka.github.io/marc-retriever/ppl?isbn=9789831665541&raw=true",
+      "supported_formats": [
+        "json",
+        "mrk",
+        "xml"
+      ]
+    },
+    "u-pustaka": {
+      "code": "u-pustaka",
+      "name": "u-Pustaka",
+      "english_name": "u-Pustaka National Information Hub & Consortium",
+      "category": "national_consortium",
+      "state": "National Consortium (Malaysia)",
+      "flag": "🇲🇾",
+      "system_engine": "Union Gateway",
+      "status": "active",
+      "portal_url": "https://www.u-pustaka.gov.my/",
+      "description": "National digital library and public library consortium gateway under Perpustakaan Negara Malaysia.",
+      "endpoint": "https://pustaka-terbuka.github.io/marc-retriever/u-pustaka",
+      "url_template": "https://pustaka-terbuka.github.io/marc-retriever/u-pustaka?isbn={isbn}",
+      "raw_url_template": "https://pustaka-terbuka.github.io/marc-retriever/u-pustaka?isbn={isbn}&raw=true",
+      "example_url": "https://pustaka-terbuka.github.io/marc-retriever/u-pustaka?isbn=9789831665541&raw=true",
+      "supported_formats": [
+        "json",
+        "mrk",
+        "xml"
+      ]
+    },
+    "malcat": {
+      "code": "malcat",
+      "name": "MALCat (Malaysian Academic Library Union Catalog)",
+      "english_name": "Malaysian Academic Library Union Catalog",
+      "category": "academic_union",
+      "state": "National Academic (PERPUN / JKPUA)",
+      "flag": "🎓🇲🇾",
+      "system_engine": "Union Gateway",
+      "status": "active",
+      "portal_url": "https://perpun.upm.edu.my",
+      "description": "Union catalog of Malaysian public and research universities managed by PERPUN / JKPUA.",
+      "endpoint": "https://pustaka-terbuka.github.io/marc-retriever/malcat",
+      "url_template": "https://pustaka-terbuka.github.io/marc-retriever/malcat?isbn={isbn}",
+      "raw_url_template": "https://pustaka-terbuka.github.io/marc-retriever/malcat?isbn={isbn}&raw=true",
+      "example_url": "https://pustaka-terbuka.github.io/marc-retriever/malcat?isbn=9789831665541&raw=true",
+      "supported_formats": [
+        "json",
+        "mrk",
+        "xml"
+      ]
+    },
+    "um": {
+      "code": "um",
+      "name": "Universiti Malaya (UM)",
+      "english_name": "University of Malaya Library",
+      "category": "academic",
+      "state": "W.P. Kuala Lumpur",
+      "flag": "🔵🟡",
+      "system_engine": "WebOPAC",
+      "status": "active",
+      "portal_url": "https://pendeta.um.edu.my",
+      "description": "Perpustakaan Universiti Malaya (Pendeta Discovery), comprehensive academic and heritage repository.",
+      "endpoint": "https://pustaka-terbuka.github.io/marc-retriever/um",
+      "url_template": "https://pustaka-terbuka.github.io/marc-retriever/um?isbn={isbn}",
+      "raw_url_template": "https://pustaka-terbuka.github.io/marc-retriever/um?isbn={isbn}&raw=true",
+      "example_url": "https://pustaka-terbuka.github.io/marc-retriever/um?isbn=9789831665541&raw=true",
+      "supported_formats": [
+        "json",
+        "mrk",
+        "xml"
+      ]
+    },
+    "ukm": {
+      "code": "ukm",
+      "name": "Universiti Kebangsaan Malaysia (UKM)",
+      "english_name": "National University of Malaysia - Tun Seri Lanang Library",
+      "category": "academic",
+      "state": "Selangor",
+      "flag": "🔴🔵🟡",
+      "system_engine": "WebOPAC",
+      "status": "active",
+      "portal_url": "https://gemilang.ukm.my",
+      "description": "Perpustakaan Tun Seri Lanang UKM, premier national research and Malay studies collection.",
+      "endpoint": "https://pustaka-terbuka.github.io/marc-retriever/ukm",
+      "url_template": "https://pustaka-terbuka.github.io/marc-retriever/ukm?isbn={isbn}",
+      "raw_url_template": "https://pustaka-terbuka.github.io/marc-retriever/ukm?isbn={isbn}&raw=true",
+      "example_url": "https://pustaka-terbuka.github.io/marc-retriever/ukm?isbn=9789831665541&raw=true",
+      "supported_formats": [
+        "json",
+        "mrk",
+        "xml"
+      ]
+    },
+    "uitm": {
+      "code": "uitm",
+      "name": "Universiti Teknologi MARA (UiTM)",
+      "english_name": "UiTM - Tun Abdul Razak Library (PTAR)",
+      "category": "academic",
+      "state": "Selangor",
+      "flag": "🟣🟡",
+      "system_engine": "WebOPAC",
+      "status": "active",
+      "portal_url": "https://ptar.uitm.edu.my",
+      "description": "Perpustakaan Tun Abdul Razak (PTAR), largest university library network across Malaysia.",
+      "endpoint": "https://pustaka-terbuka.github.io/marc-retriever/uitm",
+      "url_template": "https://pustaka-terbuka.github.io/marc-retriever/uitm?isbn={isbn}",
+      "raw_url_template": "https://pustaka-terbuka.github.io/marc-retriever/uitm?isbn={isbn}&raw=true",
+      "example_url": "https://pustaka-terbuka.github.io/marc-retriever/uitm?isbn=9789831665541&raw=true",
+      "supported_formats": [
+        "json",
+        "mrk",
+        "xml"
+      ]
+    },
+    "upsi": {
+      "code": "upsi",
+      "name": "Universiti Pendidikan Sultan Idris (UPSI)",
+      "english_name": "Sultan Idris Education University - Tuanku Bainun Library",
+      "category": "academic",
+      "state": "Perak",
+      "flag": "🔵🟡🔴",
+      "system_engine": "WebOPAC",
+      "status": "active",
+      "portal_url": "https://pustaka.upsi.edu.my",
+      "description": "Perpustakaan Tuanku Bainun UPSI, specialized in education, school pedagogy, and children's literature.",
+      "endpoint": "https://pustaka-terbuka.github.io/marc-retriever/upsi",
+      "url_template": "https://pustaka-terbuka.github.io/marc-retriever/upsi?isbn={isbn}",
+      "raw_url_template": "https://pustaka-terbuka.github.io/marc-retriever/upsi?isbn={isbn}&raw=true",
+      "example_url": "https://pustaka-terbuka.github.io/marc-retriever/upsi?isbn=9789831665541&raw=true",
+      "supported_formats": [
+        "json",
+        "mrk",
+        "xml"
+      ]
+    },
+    "dbp": {
+      "code": "dbp",
+      "name": "Dewan Bahasa dan Pustaka (DBP)",
+      "english_name": "Institute of Language and Literature Library",
+      "category": "special_heritage",
+      "state": "W.P. Kuala Lumpur",
+      "flag": "🔵🔴",
+      "system_engine": "WebOPAC",
+      "status": "active",
+      "portal_url": "https://dbp.gov.my",
+      "description": "Perpustakaan DBP, the definitive repository for Malay language, literature, and lexicography.",
+      "endpoint": "https://pustaka-terbuka.github.io/marc-retriever/dbp",
+      "url_template": "https://pustaka-terbuka.github.io/marc-retriever/dbp?isbn={isbn}",
+      "raw_url_template": "https://pustaka-terbuka.github.io/marc-retriever/dbp?isbn={isbn}&raw=true",
+      "example_url": "https://pustaka-terbuka.github.io/marc-retriever/dbp?isbn=9789831665541&raw=true",
       "supported_formats": [
         "json",
         "mrk",

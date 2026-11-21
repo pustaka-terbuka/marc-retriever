@@ -157,6 +157,64 @@ const LIBRARY_REGISTRY = {
     type: "webopac",
     status: "active",
     portalUrl: "https://www.pl.gov.my"
+  },
+  "u-pustaka": {
+    code: "u-pustaka",
+    name: "u-Pustaka",
+    state: "National Consortium (Malaysia)",
+    type: "union",
+    status: "active",
+    customerDomain: "pnm.ap.iiivega.com",
+    hostDomain: "opac.pnm.gov.my",
+    portalUrl: "https://www.u-pustaka.gov.my/"
+  },
+  malcat: {
+    code: "malcat",
+    name: "MALCat (Malaysian Academic Library Union Catalog)",
+    state: "National Academic (PERPUN / JKPUA)",
+    type: "webopac",
+    status: "active",
+    portalUrl: "https://perpun.upm.edu.my"
+  },
+  um: {
+    code: "um",
+    name: "Universiti Malaya (UM)",
+    state: "W.P. Kuala Lumpur",
+    type: "webopac",
+    status: "active",
+    portalUrl: "https://pendeta.um.edu.my"
+  },
+  ukm: {
+    code: "ukm",
+    name: "Universiti Kebangsaan Malaysia (UKM)",
+    state: "Selangor",
+    type: "webopac",
+    status: "active",
+    portalUrl: "https://gemilang.ukm.my"
+  },
+  uitm: {
+    code: "uitm",
+    name: "Universiti Teknologi MARA (UiTM)",
+    state: "Selangor",
+    type: "webopac",
+    status: "active",
+    portalUrl: "https://ptar.uitm.edu.my"
+  },
+  upsi: {
+    code: "upsi",
+    name: "Universiti Pendidikan Sultan Idris (UPSI)",
+    state: "Perak",
+    type: "webopac",
+    status: "active",
+    portalUrl: "https://pustaka.upsi.edu.my"
+  },
+  dbp: {
+    code: "dbp",
+    name: "Dewan Bahasa dan Pustaka (DBP)",
+    state: "W.P. Kuala Lumpur",
+    type: "webopac",
+    status: "active",
+    portalUrl: "https://dbp.gov.my"
   }
 };
 
@@ -335,6 +393,8 @@ async function retrieveFromVega(lib, cleanIsbn, originalIsbn) {
   const anonId = generateUUID();
   const sourceName = lib.code === "kik"
     ? "Katalog Induk Kebangsaan (KIK) / National Union Catalog"
+    : lib.code === "u-pustaka"
+    ? "u-Pustaka / National Consortium Information Hub"
     : `${lib.name} OPAC`;
 
   const baseHeaders = {

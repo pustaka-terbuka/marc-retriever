@@ -25,7 +25,14 @@ const LIBRARIES_ORDER = [
   "pns",
   "pkl",
   "ppj",
-  "ppl"
+  "ppl",
+  "u-pustaka",
+  "malcat",
+  "um",
+  "ukm",
+  "uitm",
+  "upsi",
+  "dbp"
 ];
 
 async function runTestSuite() {

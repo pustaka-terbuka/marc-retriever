@@ -18,7 +18,14 @@ LIBRARIES = [
     ("pns", "Perpustakaan Negeri Sabah", "Sabah", "🔵⚪🔴"),
     ("pkl", "Perpustakaan Kuala Lumpur", "W.P. Kuala Lumpur", "🔴⚪🔵"),
     ("ppj", "Perpustakaan Awam Putrajaya", "W.P. Putrajaya", "🟡🔵🔴"),
-    ("ppl", "Perpustakaan Awam Perbadanan Labuan", "W.P. Labuan", "🔴⚪🔵")
+    ("ppl", "Perpustakaan Awam Perbadanan Labuan", "W.P. Labuan", "🔴⚪🔵"),
+    ("u-pustaka", "u-Pustaka", "National Consortium (Malaysia)", "🇲🇾"),
+    ("malcat", "MALCat (Malaysian Academic Library Union Catalog)", "National Academic (PERPUN / JKPUA)", "🎓🇲🇾"),
+    ("um", "Universiti Malaya (UM)", "W.P. Kuala Lumpur", "🔵🟡"),
+    ("ukm", "Universiti Kebangsaan Malaysia (UKM)", "Selangor", "🔴🔵🟡"),
+    ("uitm", "Universiti Teknologi MARA (UiTM)", "Selangor", "🟣🟡"),
+    ("upsi", "Universiti Pendidikan Sultan Idris (UPSI)", "Perak", "🔵🟡🔴"),
+    ("dbp", "Dewan Bahasa dan Pustaka (DBP)", "W.P. Kuala Lumpur", "🔵🔴")
 ]
 
 BASE_DIR = r"D:\GitHub\pustaka-terbuka\marc-retriever"
