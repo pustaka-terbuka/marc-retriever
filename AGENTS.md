@@ -47,12 +47,14 @@ D:/GitHub/pustaka-terbuka/marc-retriever/
 ├── LICENSE                    # MIT License
 ├── README.md                  # Public documentation & provider status
 ├── index.html                 # Central multi-library hub & library directory
+├── providers.json             # Machine-readable provider registry for external apps
 ├── js/
 │   └── retriever.js           # Shared universal retrieval engine & registry
 ├── tools/
-│   ├── generate_providers.py  # Generates dedicated {code}/index.html provider pages
-│   ├── update_hub_index.py    # Updates hub index.html with all active cards
-│   └── test_all_providers.js  # Automated sequential test runner for all 18 providers
+│   ├── generate_providers.py      # Generates dedicated {code}/index.html provider pages
+│   ├── generate_providers_json.py # Generates providers.json machine registry
+│   ├── update_hub_index.py        # Updates hub index.html with all active cards
+│   └── test_all_providers.js      # Automated sequential test runner for all 18 providers
 └── {code}/                    # 18 Dedicated provider directories
     ├── kik/index.html         # Katalog Induk Kebangsaan (National Union Catalog)
     ├── pnm/index.html         # Perpustakaan Negara Malaysia
@@ -114,6 +116,7 @@ D:/GitHub/pustaka-terbuka/marc-retriever/
      node tools/test_all_providers.js
      ```
    - Ensure all 18 library providers pass verification with valid MARC21 JSON, `.mrk`, and MARCXML structures.
-5. **Generator Scripts**:
+5. **Generator Scripts & Metadata Sync**:
    - If provider HTML templates are modified, re-run `python tools/generate_providers.py` to regenerate all 18 directories consistently.
    - If provider cards or registry entries are updated, re-run `python tools/update_hub_index.py` to keep the root hub in sync.
+   - If providers are added or modified, re-run `python tools/generate_providers_json.py` to update the machine-readable `providers.json` registry.

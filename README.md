@@ -33,6 +33,57 @@ https://pustaka-terbuka.github.io/marc-retriever/{code}?isbn={ISBN}&raw=true
 
 ---
 
+## 📡 Machine-Readable Providers API (`providers.json`)
+
+External applications, ILS systems (such as [ErrinILS](https://github.com/naspenang/errinils)), copy-cataloguing tools, and scrapers can dynamically query the live providers list, endpoints, and URL templates via:
+
+```text
+https://pustaka-terbuka.github.io/marc-retriever/providers.json
+```
+
+### JSON Schema Highlights:
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "name": "marc-retriever",
+  "title": "Malaysian Library MARC21 Providers Registry",
+  "version": "1.0.0",
+  "homepage": "https://pustaka-terbuka.github.io/marc-retriever/",
+  "total_providers": 18,
+  "standards": {
+    "protocol": "HTTP GET",
+    "query_parameters": {
+      "isbn": "ISBN-10 or ISBN-13 (hyphens/spaces sanitized)",
+      "raw": "Set to 'true' or '1' to return raw JSON"
+    },
+    "output_formats": ["json", "mrk", "xml"]
+  },
+  "providers": [
+    {
+      "code": "kik",
+      "name": "Katalog Induk Kebangsaan",
+      "english_name": "National Union Catalog of Malaysia",
+      "category": "national_union",
+      "state": "National (Malaysia)",
+      "system_engine": "Union Gateway",
+      "status": "active",
+      "endpoint": "https://pustaka-terbuka.github.io/marc-retriever/kik",
+      "url_template": "https://pustaka-terbuka.github.io/marc-retriever/kik?isbn={isbn}",
+      "raw_url_template": "https://pustaka-terbuka.github.io/marc-retriever/kik?isbn={isbn}&raw=true",
+      "example_url": "https://pustaka-terbuka.github.io/marc-retriever/kik?isbn=9789831665541&raw=true",
+      "supported_formats": ["json", "mrk", "xml"]
+    }
+  ],
+  "by_code": {
+    "kik": { "...": "..." },
+    "pnm": { "...": "..." },
+    "ppas": { "...": "..." }
+  }
+}
+```
+
+---
+
 ## 🏛️ Supported Library Providers
 
 All 18 Malaysian national union and public library systems are implemented and verified:

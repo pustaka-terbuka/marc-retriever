@@ -1,0 +1,796 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "name": "marc-retriever",
+  "title": "Malaysian Library MARC21 Providers Registry",
+  "description": "Machine-readable directory of supported Malaysian union and public library providers for automated MARC21 bibliographic record retrieval.",
+  "version": "1.0.0",
+  "homepage": "https://pustaka-terbuka.github.io/marc-retriever/",
+  "repository": "https://github.com/pustaka-terbuka/marc-retriever",
+  "license": "MIT",
+  "total_providers": 18,
+  "standards": {
+    "protocol": "HTTP GET",
+    "query_parameters": {
+      "isbn": "ISBN-10 or ISBN-13 (hyphens and spaces automatically sanitized)",
+      "raw": "Set to 'true' or '1' to return pure raw JSON without HTML formatting",
+      "format": "Optional format specification ('json', 'mrk', 'xml', or 'raw')"
+    },
+    "output_formats": [
+      {
+        "format": "json",
+        "mime_type": "application/json",
+        "description": "Structured JSON containing MARC leader, control fields, and data fields with subfields"
+      },
+      {
+        "format": "mrk",
+        "mime_type": "text/plain",
+        "description": "MarcEdit tagged mnemonic text format (=LDR, =001, =020, =245, etc.)"
+      },
+      {
+        "format": "xml",
+        "mime_type": "application/xml",
+        "description": "Standard Library of Congress MARCXML slim schema"
+      }
+    ]
+  },
+  "providers": [
+    {
+      "code": "kik",
+      "name": "Katalog Induk Kebangsaan",
+      "english_name": "National Union Catalog of Malaysia",
+      "category": "national_union",
+      "state": "National (Malaysia)",
+      "flag": "🇲🇾",
+      "system_engine": "Union Gateway",
+      "status": "active",
+      "portal_url": "https://kik.pnm.gov.my/",
+      "description": "National Union Catalog uniting collections of Malaysian public, academic, and special libraries.",
+      "endpoint": "https://pustaka-terbuka.github.io/marc-retriever/kik",
+      "url_template": "https://pustaka-terbuka.github.io/marc-retriever/kik?isbn={isbn}",
+      "raw_url_template": "https://pustaka-terbuka.github.io/marc-retriever/kik?isbn={isbn}&raw=true",
+      "example_url": "https://pustaka-terbuka.github.io/marc-retriever/kik?isbn=9789831665541&raw=true",
+      "supported_formats": [
+        "json",
+        "mrk",
+        "xml"
+      ]
+    },
+    {
+      "code": "pnm",
+      "name": "Perpustakaan Negara Malaysia",
+      "english_name": "National Library of Malaysia",
+      "category": "national_library",
+      "state": "National (Malaysia)",
+      "flag": "🇲🇾",
+      "system_engine": "Clarivate Vega Discover",
+      "status": "active",
+      "portal_url": "https://opac.pnm.gov.my/",
+      "description": "National legal deposit depository and central bibliographic repository.",
+      "endpoint": "https://pustaka-terbuka.github.io/marc-retriever/pnm",
+      "url_template": "https://pustaka-terbuka.github.io/marc-retriever/pnm?isbn={isbn}",
+      "raw_url_template": "https://pustaka-terbuka.github.io/marc-retriever/pnm?isbn={isbn}&raw=true",
+      "example_url": "https://pustaka-terbuka.github.io/marc-retriever/pnm?isbn=9789831665541&raw=true",
+      "supported_formats": [
+        "json",
+        "mrk",
+        "xml"
+      ]
+    },
+    {
+      "code": "ppas",
+      "name": "Perbadanan Perpustakaan Awam Selangor",
+      "english_name": "Selangor Public Library Corporation",
+      "category": "state_public",
+      "state": "Selangor",
+      "flag": "🔴🟡",
+      "system_engine": "Clarivate Vega Discover",
+      "status": "active",
+      "portal_url": "https://ppas.ap.iiivega.com/",
+      "description": "Selangor state public library network & Raja Tun Uda central repository.",
+      "endpoint": "https://pustaka-terbuka.github.io/marc-retriever/ppas",
+      "url_template": "https://pustaka-terbuka.github.io/marc-retriever/ppas?isbn={isbn}",
+      "raw_url_template": "https://pustaka-terbuka.github.io/marc-retriever/ppas?isbn={isbn}&raw=true",
+      "example_url": "https://pustaka-terbuka.github.io/marc-retriever/ppas?isbn=9678915006&raw=true",
+      "supported_formats": [
+        "json",
+        "mrk",
+        "xml"
+      ]
+    },
+    {
+      "code": "ppap",
+      "name": "Perbadanan Perpustakaan Awam Pulau Pinang",
+      "english_name": "Penang Public Library Corporation",
+      "category": "state_public",
+      "state": "Pulau Pinang",
+      "flag": "🟡🔵",
+      "system_engine": "Koha OPAC",
+      "status": "active",
+      "portal_url": "https://www.penanglib.gov.my/",
+      "description": "Penang state public library consortium and community branch network.",
+      "endpoint": "https://pustaka-terbuka.github.io/marc-retriever/ppap",
+      "url_template": "https://pustaka-terbuka.github.io/marc-retriever/ppap?isbn={isbn}",
+      "raw_url_template": "https://pustaka-terbuka.github.io/marc-retriever/ppap?isbn={isbn}&raw=true",
+      "example_url": "https://pustaka-terbuka.github.io/marc-retriever/ppap?isbn=9789831665541&raw=true",
+      "supported_formats": [
+        "json",
+        "mrk",
+        "xml"
+      ]
+    },
+    {
+      "code": "ppanj",
+      "name": "Perbadanan Perpustakaan Awam Negeri Johor",
+      "english_name": "Johor State Public Library Corporation",
+      "category": "state_public",
+      "state": "Johor",
+      "flag": "🔵🔴",
+      "system_engine": "WebOPAC",
+      "status": "active",
+      "portal_url": "https://ppaj.johor.gov.my",
+      "description": "Johor state public library corporation & regional community divisions.",
+      "endpoint": "https://pustaka-terbuka.github.io/marc-retriever/ppanj",
+      "url_template": "https://pustaka-terbuka.github.io/marc-retriever/ppanj?isbn={isbn}",
+      "raw_url_template": "https://pustaka-terbuka.github.io/marc-retriever/ppanj?isbn={isbn}&raw=true",
+      "example_url": "https://pustaka-terbuka.github.io/marc-retriever/ppanj?isbn=9789831665541&raw=true",
+      "supported_formats": [
+        "json",
+        "mrk",
+        "xml"
+      ]
+    },
+    {
+      "code": "ppanpk",
+      "name": "Perbadanan Perpustakaan Awam Negeri Perak",
+      "english_name": "Perak State Public Library Corporation",
+      "category": "state_public",
+      "state": "Perak",
+      "flag": "⚪🟡⚫",
+      "system_engine": "Koha OPAC",
+      "status": "active",
+      "portal_url": "http://ppanpk.gov.my/",
+      "description": "Perak state public library system and municipal branches.",
+      "endpoint": "https://pustaka-terbuka.github.io/marc-retriever/ppanpk",
+      "url_template": "https://pustaka-terbuka.github.io/marc-retriever/ppanpk?isbn={isbn}",
+      "raw_url_template": "https://pustaka-terbuka.github.io/marc-retriever/ppanpk?isbn={isbn}&raw=true",
+      "example_url": "https://pustaka-terbuka.github.io/marc-retriever/ppanpk?isbn=9789831665541&raw=true",
+      "supported_formats": [
+        "json",
+        "mrk",
+        "xml"
+      ]
+    },
+    {
+      "code": "ppank",
+      "name": "Perbadanan Perpustakaan Awam Negeri Kedah",
+      "english_name": "Kedah State Public Library Corporation",
+      "category": "state_public",
+      "state": "Kedah",
+      "flag": "🔴🟢",
+      "system_engine": "Koha OPAC",
+      "status": "active",
+      "portal_url": "http://kedahlib.gov.my/",
+      "description": "Kedah state public library network and district branches.",
+      "endpoint": "https://pustaka-terbuka.github.io/marc-retriever/ppank",
+      "url_template": "https://pustaka-terbuka.github.io/marc-retriever/ppank?isbn={isbn}",
+      "raw_url_template": "https://pustaka-terbuka.github.io/marc-retriever/ppank?isbn={isbn}&raw=true",
+      "example_url": "https://pustaka-terbuka.github.io/marc-retriever/ppank?isbn=9789831665541&raw=true",
+      "supported_formats": [
+        "json",
+        "mrk",
+        "xml"
+      ]
+    },
+    {
+      "code": "ppak",
+      "name": "Perbadanan Perpustakaan Awam Kelantan",
+      "english_name": "Kelantan Public Library Corporation",
+      "category": "state_public",
+      "state": "Kelantan",
+      "flag": "🔴⚪",
+      "system_engine": "WebOPAC",
+      "status": "active",
+      "portal_url": "https://www.kelantanlibrary.gov.my",
+      "description": "Kelantan state public library network and resource centers.",
+      "endpoint": "https://pustaka-terbuka.github.io/marc-retriever/ppak",
+      "url_template": "https://pustaka-terbuka.github.io/marc-retriever/ppak?isbn={isbn}",
+      "raw_url_template": "https://pustaka-terbuka.github.io/marc-retriever/ppak?isbn={isbn}&raw=true",
+      "example_url": "https://pustaka-terbuka.github.io/marc-retriever/ppak?isbn=9789831665541&raw=true",
+      "supported_formats": [
+        "json",
+        "mrk",
+        "xml"
+      ]
+    },
+    {
+      "code": "ppat",
+      "name": "Perbadanan Perpustakaan Awam Terengganu",
+      "english_name": "Terengganu Public Library Corporation",
+      "category": "state_public",
+      "state": "Terengganu",
+      "flag": "⚪⚫",
+      "system_engine": "WebOPAC",
+      "status": "active",
+      "portal_url": "https://www.trglib.gov.my",
+      "description": "Terengganu public library corporation & regional divisions.",
+      "endpoint": "https://pustaka-terbuka.github.io/marc-retriever/ppat",
+      "url_template": "https://pustaka-terbuka.github.io/marc-retriever/ppat?isbn={isbn}",
+      "raw_url_template": "https://pustaka-terbuka.github.io/marc-retriever/ppat?isbn={isbn}&raw=true",
+      "example_url": "https://pustaka-terbuka.github.io/marc-retriever/ppat?isbn=9789831665541&raw=true",
+      "supported_formats": [
+        "json",
+        "mrk",
+        "xml"
+      ]
+    },
+    {
+      "code": "ppaph",
+      "name": "Perbadanan Perpustakaan Awam Pahang",
+      "english_name": "Pahang Public Library Corporation",
+      "category": "state_public",
+      "state": "Pahang",
+      "flag": "⚪⚫",
+      "system_engine": "WebOPAC",
+      "status": "active",
+      "portal_url": "https://pahanglibrary.gov.my",
+      "description": "Pahang state public library network and rural library services.",
+      "endpoint": "https://pustaka-terbuka.github.io/marc-retriever/ppaph",
+      "url_template": "https://pustaka-terbuka.github.io/marc-retriever/ppaph?isbn={isbn}",
+      "raw_url_template": "https://pustaka-terbuka.github.io/marc-retriever/ppaph?isbn={isbn}&raw=true",
+      "example_url": "https://pustaka-terbuka.github.io/marc-retriever/ppaph?isbn=9789831665541&raw=true",
+      "supported_formats": [
+        "json",
+        "mrk",
+        "xml"
+      ]
+    },
+    {
+      "code": "ppans",
+      "name": "Perbadanan Perpustakaan Awam Negeri Sembilan",
+      "english_name": "Negeri Sembilan Public Library Corporation",
+      "category": "state_public",
+      "state": "Negeri Sembilan",
+      "flag": "🟡🔴⚫",
+      "system_engine": "WebOPAC",
+      "status": "active",
+      "portal_url": "https://www.nslibrary.gov.my",
+      "description": "Negeri Sembilan public library system and community mobile libraries.",
+      "endpoint": "https://pustaka-terbuka.github.io/marc-retriever/ppans",
+      "url_template": "https://pustaka-terbuka.github.io/marc-retriever/ppans?isbn={isbn}",
+      "raw_url_template": "https://pustaka-terbuka.github.io/marc-retriever/ppans?isbn={isbn}&raw=true",
+      "example_url": "https://pustaka-terbuka.github.io/marc-retriever/ppans?isbn=9789831665541&raw=true",
+      "supported_formats": [
+        "json",
+        "mrk",
+        "xml"
+      ]
+    },
+    {
+      "code": "perpustam",
+      "name": "Perbadanan Perpustakaan Awam Melaka",
+      "english_name": "Melaka Public Library Corporation",
+      "category": "state_public",
+      "state": "Melaka",
+      "flag": "🔵🔴⚪",
+      "system_engine": "WebOPAC",
+      "status": "active",
+      "portal_url": "https://perpustam.gov.my",
+      "description": "Melaka state public library corporation and historical collections.",
+      "endpoint": "https://pustaka-terbuka.github.io/marc-retriever/perpustam",
+      "url_template": "https://pustaka-terbuka.github.io/marc-retriever/perpustam?isbn={isbn}",
+      "raw_url_template": "https://pustaka-terbuka.github.io/marc-retriever/perpustam?isbn={isbn}&raw=true",
+      "example_url": "https://pustaka-terbuka.github.io/marc-retriever/perpustam?isbn=9789831665541&raw=true",
+      "supported_formats": [
+        "json",
+        "mrk",
+        "xml"
+      ]
+    },
+    {
+      "code": "ppanps",
+      "name": "Perbadanan Perpustakaan Awam Negeri Perlis",
+      "english_name": "Perlis State Public Library Corporation",
+      "category": "state_public",
+      "state": "Perlis",
+      "flag": "🟡🔵",
+      "system_engine": "Koha OPAC",
+      "status": "active",
+      "portal_url": "http://perlislib.gov.my/",
+      "description": "Perlis state public library network and community services.",
+      "endpoint": "https://pustaka-terbuka.github.io/marc-retriever/ppanps",
+      "url_template": "https://pustaka-terbuka.github.io/marc-retriever/ppanps?isbn={isbn}",
+      "raw_url_template": "https://pustaka-terbuka.github.io/marc-retriever/ppanps?isbn={isbn}&raw=true",
+      "example_url": "https://pustaka-terbuka.github.io/marc-retriever/ppanps?isbn=9789831665541&raw=true",
+      "supported_formats": [
+        "json",
+        "mrk",
+        "xml"
+      ]
+    },
+    {
+      "code": "pustaka",
+      "name": "Pustaka Negeri Sarawak",
+      "english_name": "Sarawak State Library",
+      "category": "state_public",
+      "state": "Sarawak",
+      "flag": "🔴🟡⚫",
+      "system_engine": "WebOPAC",
+      "status": "active",
+      "portal_url": "https://www.pustaka-sarawak.com",
+      "description": "Sarawak state library and Borneo legal deposit repository.",
+      "endpoint": "https://pustaka-terbuka.github.io/marc-retriever/pustaka",
+      "url_template": "https://pustaka-terbuka.github.io/marc-retriever/pustaka?isbn={isbn}",
+      "raw_url_template": "https://pustaka-terbuka.github.io/marc-retriever/pustaka?isbn={isbn}&raw=true",
+      "example_url": "https://pustaka-terbuka.github.io/marc-retriever/pustaka?isbn=9789831665541&raw=true",
+      "supported_formats": [
+        "json",
+        "mrk",
+        "xml"
+      ]
+    },
+    {
+      "code": "pns",
+      "name": "Perpustakaan Negeri Sabah",
+      "english_name": "Sabah State Library",
+      "category": "state_public",
+      "state": "Sabah",
+      "flag": "🔵⚪🔴",
+      "system_engine": "WebOPAC",
+      "status": "active",
+      "portal_url": "https://library.sabah.gov.my",
+      "description": "Sabah state library network and North Borneo collections.",
+      "endpoint": "https://pustaka-terbuka.github.io/marc-retriever/pns",
+      "url_template": "https://pustaka-terbuka.github.io/marc-retriever/pns?isbn={isbn}",
+      "raw_url_template": "https://pustaka-terbuka.github.io/marc-retriever/pns?isbn={isbn}&raw=true",
+      "example_url": "https://pustaka-terbuka.github.io/marc-retriever/pns?isbn=9789831665541&raw=true",
+      "supported_formats": [
+        "json",
+        "mrk",
+        "xml"
+      ]
+    },
+    {
+      "code": "pkl",
+      "name": "Perpustakaan Kuala Lumpur",
+      "english_name": "Kuala Lumpur Library",
+      "category": "territory_public",
+      "state": "W.P. Kuala Lumpur",
+      "flag": "🔴⚪🔵",
+      "system_engine": "WebOPAC",
+      "status": "active",
+      "portal_url": "https://www.dbkl.gov.my",
+      "description": "Kuala Lumpur metropolitan public library system under DBKL.",
+      "endpoint": "https://pustaka-terbuka.github.io/marc-retriever/pkl",
+      "url_template": "https://pustaka-terbuka.github.io/marc-retriever/pkl?isbn={isbn}",
+      "raw_url_template": "https://pustaka-terbuka.github.io/marc-retriever/pkl?isbn={isbn}&raw=true",
+      "example_url": "https://pustaka-terbuka.github.io/marc-retriever/pkl?isbn=9789831665541&raw=true",
+      "supported_formats": [
+        "json",
+        "mrk",
+        "xml"
+      ]
+    },
+    {
+      "code": "ppj",
+      "name": "Perpustakaan Awam Putrajaya",
+      "english_name": "Putrajaya Public Library",
+      "category": "territory_public",
+      "state": "W.P. Putrajaya",
+      "flag": "🟡🔵🔴",
+      "system_engine": "WebOPAC",
+      "status": "active",
+      "portal_url": "https://library.ppj.gov.my",
+      "description": "Putrajaya administrative federal territory public library.",
+      "endpoint": "https://pustaka-terbuka.github.io/marc-retriever/ppj",
+      "url_template": "https://pustaka-terbuka.github.io/marc-retriever/ppj?isbn={isbn}",
+      "raw_url_template": "https://pustaka-terbuka.github.io/marc-retriever/ppj?isbn={isbn}&raw=true",
+      "example_url": "https://pustaka-terbuka.github.io/marc-retriever/ppj?isbn=9789831665541&raw=true",
+      "supported_formats": [
+        "json",
+        "mrk",
+        "xml"
+      ]
+    },
+    {
+      "code": "ppl",
+      "name": "Perpustakaan Awam Perbadanan Labuan",
+      "english_name": "Labuan Corporation Public Library",
+      "category": "territory_public",
+      "state": "W.P. Labuan",
+      "flag": "🔴⚪🔵",
+      "system_engine": "WebOPAC",
+      "status": "active",
+      "portal_url": "https://www.pl.gov.my",
+      "description": "Federal Territory of Labuan public library corporation.",
+      "endpoint": "https://pustaka-terbuka.github.io/marc-retriever/ppl",
+      "url_template": "https://pustaka-terbuka.github.io/marc-retriever/ppl?isbn={isbn}",
+      "raw_url_template": "https://pustaka-terbuka.github.io/marc-retriever/ppl?isbn={isbn}&raw=true",
+      "example_url": "https://pustaka-terbuka.github.io/marc-retriever/ppl?isbn=9789831665541&raw=true",
+      "supported_formats": [
+        "json",
+        "mrk",
+        "xml"
+      ]
+    }
+  ],
+  "by_code": {
+    "kik": {
+      "code": "kik",
+      "name": "Katalog Induk Kebangsaan",
+      "english_name": "National Union Catalog of Malaysia",
+      "category": "national_union",
+      "state": "National (Malaysia)",
+      "flag": "🇲🇾",
+      "system_engine": "Union Gateway",
+      "status": "active",
+      "portal_url": "https://kik.pnm.gov.my/",
+      "description": "National Union Catalog uniting collections of Malaysian public, academic, and special libraries.",
+      "endpoint": "https://pustaka-terbuka.github.io/marc-retriever/kik",
+      "url_template": "https://pustaka-terbuka.github.io/marc-retriever/kik?isbn={isbn}",
+      "raw_url_template": "https://pustaka-terbuka.github.io/marc-retriever/kik?isbn={isbn}&raw=true",
+      "example_url": "https://pustaka-terbuka.github.io/marc-retriever/kik?isbn=9789831665541&raw=true",
+      "supported_formats": [
+        "json",
+        "mrk",
+        "xml"
+      ]
+    },
+    "pnm": {
+      "code": "pnm",
+      "name": "Perpustakaan Negara Malaysia",
+      "english_name": "National Library of Malaysia",
+      "category": "national_library",
+      "state": "National (Malaysia)",
+      "flag": "🇲🇾",
+      "system_engine": "Clarivate Vega Discover",
+      "status": "active",
+      "portal_url": "https://opac.pnm.gov.my/",
+      "description": "National legal deposit depository and central bibliographic repository.",
+      "endpoint": "https://pustaka-terbuka.github.io/marc-retriever/pnm",
+      "url_template": "https://pustaka-terbuka.github.io/marc-retriever/pnm?isbn={isbn}",
+      "raw_url_template": "https://pustaka-terbuka.github.io/marc-retriever/pnm?isbn={isbn}&raw=true",
+      "example_url": "https://pustaka-terbuka.github.io/marc-retriever/pnm?isbn=9789831665541&raw=true",
+      "supported_formats": [
+        "json",
+        "mrk",
+        "xml"
+      ]
+    },
+    "ppas": {
+      "code": "ppas",
+      "name": "Perbadanan Perpustakaan Awam Selangor",
+      "english_name": "Selangor Public Library Corporation",
+      "category": "state_public",
+      "state": "Selangor",
+      "flag": "🔴🟡",
+      "system_engine": "Clarivate Vega Discover",
+      "status": "active",
+      "portal_url": "https://ppas.ap.iiivega.com/",
+      "description": "Selangor state public library network & Raja Tun Uda central repository.",
+      "endpoint": "https://pustaka-terbuka.github.io/marc-retriever/ppas",
+      "url_template": "https://pustaka-terbuka.github.io/marc-retriever/ppas?isbn={isbn}",
+      "raw_url_template": "https://pustaka-terbuka.github.io/marc-retriever/ppas?isbn={isbn}&raw=true",
+      "example_url": "https://pustaka-terbuka.github.io/marc-retriever/ppas?isbn=9678915006&raw=true",
+      "supported_formats": [
+        "json",
+        "mrk",
+        "xml"
+      ]
+    },
+    "ppap": {
+      "code": "ppap",
+      "name": "Perbadanan Perpustakaan Awam Pulau Pinang",
+      "english_name": "Penang Public Library Corporation",
+      "category": "state_public",
+      "state": "Pulau Pinang",
+      "flag": "🟡🔵",
+      "system_engine": "Koha OPAC",
+      "status": "active",
+      "portal_url": "https://www.penanglib.gov.my/",
+      "description": "Penang state public library consortium and community branch network.",
+      "endpoint": "https://pustaka-terbuka.github.io/marc-retriever/ppap",
+      "url_template": "https://pustaka-terbuka.github.io/marc-retriever/ppap?isbn={isbn}",
+      "raw_url_template": "https://pustaka-terbuka.github.io/marc-retriever/ppap?isbn={isbn}&raw=true",
+      "example_url": "https://pustaka-terbuka.github.io/marc-retriever/ppap?isbn=9789831665541&raw=true",
+      "supported_formats": [
+        "json",
+        "mrk",
+        "xml"
+      ]
+    },
+    "ppanj": {
+      "code": "ppanj",
+      "name": "Perbadanan Perpustakaan Awam Negeri Johor",
+      "english_name": "Johor State Public Library Corporation",
+      "category": "state_public",
+      "state": "Johor",
+      "flag": "🔵🔴",
+      "system_engine": "WebOPAC",
+      "status": "active",
+      "portal_url": "https://ppaj.johor.gov.my",
+      "description": "Johor state public library corporation & regional community divisions.",
+      "endpoint": "https://pustaka-terbuka.github.io/marc-retriever/ppanj",
+      "url_template": "https://pustaka-terbuka.github.io/marc-retriever/ppanj?isbn={isbn}",
+      "raw_url_template": "https://pustaka-terbuka.github.io/marc-retriever/ppanj?isbn={isbn}&raw=true",
+      "example_url": "https://pustaka-terbuka.github.io/marc-retriever/ppanj?isbn=9789831665541&raw=true",
+      "supported_formats": [
+        "json",
+        "mrk",
+        "xml"
+      ]
+    },
+    "ppanpk": {
+      "code": "ppanpk",
+      "name": "Perbadanan Perpustakaan Awam Negeri Perak",
+      "english_name": "Perak State Public Library Corporation",
+      "category": "state_public",
+      "state": "Perak",
+      "flag": "⚪🟡⚫",
+      "system_engine": "Koha OPAC",
+      "status": "active",
+      "portal_url": "http://ppanpk.gov.my/",
+      "description": "Perak state public library system and municipal branches.",
+      "endpoint": "https://pustaka-terbuka.github.io/marc-retriever/ppanpk",
+      "url_template": "https://pustaka-terbuka.github.io/marc-retriever/ppanpk?isbn={isbn}",
+      "raw_url_template": "https://pustaka-terbuka.github.io/marc-retriever/ppanpk?isbn={isbn}&raw=true",
+      "example_url": "https://pustaka-terbuka.github.io/marc-retriever/ppanpk?isbn=9789831665541&raw=true",
+      "supported_formats": [
+        "json",
+        "mrk",
+        "xml"
+      ]
+    },
+    "ppank": {
+      "code": "ppank",
+      "name": "Perbadanan Perpustakaan Awam Negeri Kedah",
+      "english_name": "Kedah State Public Library Corporation",
+      "category": "state_public",
+      "state": "Kedah",
+      "flag": "🔴🟢",
+      "system_engine": "Koha OPAC",
+      "status": "active",
+      "portal_url": "http://kedahlib.gov.my/",
+      "description": "Kedah state public library network and district branches.",
+      "endpoint": "https://pustaka-terbuka.github.io/marc-retriever/ppank",
+      "url_template": "https://pustaka-terbuka.github.io/marc-retriever/ppank?isbn={isbn}",
+      "raw_url_template": "https://pustaka-terbuka.github.io/marc-retriever/ppank?isbn={isbn}&raw=true",
+      "example_url": "https://pustaka-terbuka.github.io/marc-retriever/ppank?isbn=9789831665541&raw=true",
+      "supported_formats": [
+        "json",
+        "mrk",
+        "xml"
+      ]
+    },
+    "ppak": {
+      "code": "ppak",
+      "name": "Perbadanan Perpustakaan Awam Kelantan",
+      "english_name": "Kelantan Public Library Corporation",
+      "category": "state_public",
+      "state": "Kelantan",
+      "flag": "🔴⚪",
+      "system_engine": "WebOPAC",
+      "status": "active",
+      "portal_url": "https://www.kelantanlibrary.gov.my",
+      "description": "Kelantan state public library network and resource centers.",
+      "endpoint": "https://pustaka-terbuka.github.io/marc-retriever/ppak",
+      "url_template": "https://pustaka-terbuka.github.io/marc-retriever/ppak?isbn={isbn}",
+      "raw_url_template": "https://pustaka-terbuka.github.io/marc-retriever/ppak?isbn={isbn}&raw=true",
+      "example_url": "https://pustaka-terbuka.github.io/marc-retriever/ppak?isbn=9789831665541&raw=true",
+      "supported_formats": [
+        "json",
+        "mrk",
+        "xml"
+      ]
+    },
+    "ppat": {
+      "code": "ppat",
+      "name": "Perbadanan Perpustakaan Awam Terengganu",
+      "english_name": "Terengganu Public Library Corporation",
+      "category": "state_public",
+      "state": "Terengganu",
+      "flag": "⚪⚫",
+      "system_engine": "WebOPAC",
+      "status": "active",
+      "portal_url": "https://www.trglib.gov.my",
+      "description": "Terengganu public library corporation & regional divisions.",
+      "endpoint": "https://pustaka-terbuka.github.io/marc-retriever/ppat",
+      "url_template": "https://pustaka-terbuka.github.io/marc-retriever/ppat?isbn={isbn}",
+      "raw_url_template": "https://pustaka-terbuka.github.io/marc-retriever/ppat?isbn={isbn}&raw=true",
+      "example_url": "https://pustaka-terbuka.github.io/marc-retriever/ppat?isbn=9789831665541&raw=true",
+      "supported_formats": [
+        "json",
+        "mrk",
+        "xml"
+      ]
+    },
+    "ppaph": {
+      "code": "ppaph",
+      "name": "Perbadanan Perpustakaan Awam Pahang",
+      "english_name": "Pahang Public Library Corporation",
+      "category": "state_public",
+      "state": "Pahang",
+      "flag": "⚪⚫",
+      "system_engine": "WebOPAC",
+      "status": "active",
+      "portal_url": "https://pahanglibrary.gov.my",
+      "description": "Pahang state public library network and rural library services.",
+      "endpoint": "https://pustaka-terbuka.github.io/marc-retriever/ppaph",
+      "url_template": "https://pustaka-terbuka.github.io/marc-retriever/ppaph?isbn={isbn}",
+      "raw_url_template": "https://pustaka-terbuka.github.io/marc-retriever/ppaph?isbn={isbn}&raw=true",
+      "example_url": "https://pustaka-terbuka.github.io/marc-retriever/ppaph?isbn=9789831665541&raw=true",
+      "supported_formats": [
+        "json",
+        "mrk",
+        "xml"
+      ]
+    },
+    "ppans": {
+      "code": "ppans",
+      "name": "Perbadanan Perpustakaan Awam Negeri Sembilan",
+      "english_name": "Negeri Sembilan Public Library Corporation",
+      "category": "state_public",
+      "state": "Negeri Sembilan",
+      "flag": "🟡🔴⚫",
+      "system_engine": "WebOPAC",
+      "status": "active",
+      "portal_url": "https://www.nslibrary.gov.my",
+      "description": "Negeri Sembilan public library system and community mobile libraries.",
+      "endpoint": "https://pustaka-terbuka.github.io/marc-retriever/ppans",
+      "url_template": "https://pustaka-terbuka.github.io/marc-retriever/ppans?isbn={isbn}",
+      "raw_url_template": "https://pustaka-terbuka.github.io/marc-retriever/ppans?isbn={isbn}&raw=true",
+      "example_url": "https://pustaka-terbuka.github.io/marc-retriever/ppans?isbn=9789831665541&raw=true",
+      "supported_formats": [
+        "json",
+        "mrk",
+        "xml"
+      ]
+    },
+    "perpustam": {
+      "code": "perpustam",
+      "name": "Perbadanan Perpustakaan Awam Melaka",
+      "english_name": "Melaka Public Library Corporation",
+      "category": "state_public",
+      "state": "Melaka",
+      "flag": "🔵🔴⚪",
+      "system_engine": "WebOPAC",
+      "status": "active",
+      "portal_url": "https://perpustam.gov.my",
+      "description": "Melaka state public library corporation and historical collections.",
+      "endpoint": "https://pustaka-terbuka.github.io/marc-retriever/perpustam",
+      "url_template": "https://pustaka-terbuka.github.io/marc-retriever/perpustam?isbn={isbn}",
+      "raw_url_template": "https://pustaka-terbuka.github.io/marc-retriever/perpustam?isbn={isbn}&raw=true",
+      "example_url": "https://pustaka-terbuka.github.io/marc-retriever/perpustam?isbn=9789831665541&raw=true",
+      "supported_formats": [
+        "json",
+        "mrk",
+        "xml"
+      ]
+    },
+    "ppanps": {
+      "code": "ppanps",
+      "name": "Perbadanan Perpustakaan Awam Negeri Perlis",
+      "english_name": "Perlis State Public Library Corporation",
+      "category": "state_public",
+      "state": "Perlis",
+      "flag": "🟡🔵",
+      "system_engine": "Koha OPAC",
+      "status": "active",
+      "portal_url": "http://perlislib.gov.my/",
+      "description": "Perlis state public library network and community services.",
+      "endpoint": "https://pustaka-terbuka.github.io/marc-retriever/ppanps",
+      "url_template": "https://pustaka-terbuka.github.io/marc-retriever/ppanps?isbn={isbn}",
+      "raw_url_template": "https://pustaka-terbuka.github.io/marc-retriever/ppanps?isbn={isbn}&raw=true",
+      "example_url": "https://pustaka-terbuka.github.io/marc-retriever/ppanps?isbn=9789831665541&raw=true",
+      "supported_formats": [
+        "json",
+        "mrk",
+        "xml"
+      ]
+    },
+    "pustaka": {
+      "code": "pustaka",
+      "name": "Pustaka Negeri Sarawak",
+      "english_name": "Sarawak State Library",
+      "category": "state_public",
+      "state": "Sarawak",
+      "flag": "🔴🟡⚫",
+      "system_engine": "WebOPAC",
+      "status": "active",
+      "portal_url": "https://www.pustaka-sarawak.com",
+      "description": "Sarawak state library and Borneo legal deposit repository.",
+      "endpoint": "https://pustaka-terbuka.github.io/marc-retriever/pustaka",
+      "url_template": "https://pustaka-terbuka.github.io/marc-retriever/pustaka?isbn={isbn}",
+      "raw_url_template": "https://pustaka-terbuka.github.io/marc-retriever/pustaka?isbn={isbn}&raw=true",
+      "example_url": "https://pustaka-terbuka.github.io/marc-retriever/pustaka?isbn=9789831665541&raw=true",
+      "supported_formats": [
+        "json",
+        "mrk",
+        "xml"
+      ]
+    },
+    "pns": {
+      "code": "pns",
+      "name": "Perpustakaan Negeri Sabah",
+      "english_name": "Sabah State Library",
+      "category": "state_public",
+      "state": "Sabah",
+      "flag": "🔵⚪🔴",
+      "system_engine": "WebOPAC",
+      "status": "active",
+      "portal_url": "https://library.sabah.gov.my",
+      "description": "Sabah state library network and North Borneo collections.",
+      "endpoint": "https://pustaka-terbuka.github.io/marc-retriever/pns",
+      "url_template": "https://pustaka-terbuka.github.io/marc-retriever/pns?isbn={isbn}",
+      "raw_url_template": "https://pustaka-terbuka.github.io/marc-retriever/pns?isbn={isbn}&raw=true",
+      "example_url": "https://pustaka-terbuka.github.io/marc-retriever/pns?isbn=9789831665541&raw=true",
+      "supported_formats": [
+        "json",
+        "mrk",
+        "xml"
+      ]
+    },
+    "pkl": {
+      "code": "pkl",
+      "name": "Perpustakaan Kuala Lumpur",
+      "english_name": "Kuala Lumpur Library",
+      "category": "territory_public",
+      "state": "W.P. Kuala Lumpur",
+      "flag": "🔴⚪🔵",
+      "system_engine": "WebOPAC",
+      "status": "active",
+      "portal_url": "https://www.dbkl.gov.my",
+      "description": "Kuala Lumpur metropolitan public library system under DBKL.",
+      "endpoint": "https://pustaka-terbuka.github.io/marc-retriever/pkl",
+      "url_template": "https://pustaka-terbuka.github.io/marc-retriever/pkl?isbn={isbn}",
+      "raw_url_template": "https://pustaka-terbuka.github.io/marc-retriever/pkl?isbn={isbn}&raw=true",
+      "example_url": "https://pustaka-terbuka.github.io/marc-retriever/pkl?isbn=9789831665541&raw=true",
+      "supported_formats": [
+        "json",
+        "mrk",
+        "xml"
+      ]
+    },
+    "ppj": {
+      "code": "ppj",
+      "name": "Perpustakaan Awam Putrajaya",
+      "english_name": "Putrajaya Public Library",
+      "category": "territory_public",
+      "state": "W.P. Putrajaya",
+      "flag": "🟡🔵🔴",
+      "system_engine": "WebOPAC",
+      "status": "active",
+      "portal_url": "https://library.ppj.gov.my",
+      "description": "Putrajaya administrative federal territory public library.",
+      "endpoint": "https://pustaka-terbuka.github.io/marc-retriever/ppj",
+      "url_template": "https://pustaka-terbuka.github.io/marc-retriever/ppj?isbn={isbn}",
+      "raw_url_template": "https://pustaka-terbuka.github.io/marc-retriever/ppj?isbn={isbn}&raw=true",
+      "example_url": "https://pustaka-terbuka.github.io/marc-retriever/ppj?isbn=9789831665541&raw=true",
+      "supported_formats": [
+        "json",
+        "mrk",
+        "xml"
+      ]
+    },
+    "ppl": {
+      "code": "ppl",
+      "name": "Perpustakaan Awam Perbadanan Labuan",
+      "english_name": "Labuan Corporation Public Library",
+      "category": "territory_public",
+      "state": "W.P. Labuan",
+      "flag": "🔴⚪🔵",
+      "system_engine": "WebOPAC",
+      "status": "active",
+      "portal_url": "https://www.pl.gov.my",
+      "description": "Federal Territory of Labuan public library corporation.",
+      "endpoint": "https://pustaka-terbuka.github.io/marc-retriever/ppl",
+      "url_template": "https://pustaka-terbuka.github.io/marc-retriever/ppl?isbn={isbn}",
+      "raw_url_template": "https://pustaka-terbuka.github.io/marc-retriever/ppl?isbn={isbn}&raw=true",
+      "example_url": "https://pustaka-terbuka.github.io/marc-retriever/ppl?isbn=9789831665541&raw=true",
+      "supported_formats": [
+        "json",
+        "mrk",
+        "xml"
+      ]
+    }
+  }
+}

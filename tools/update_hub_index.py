@@ -441,6 +441,15 @@ HTML_CONTENT = f"""<!DOCTYPE html>
     <div class="endpoint-box">
       <div>
         <span class="badge-method">GET</span>
+        <a href="./kik?isbn=9789831665541" target="_blank">
+          https://pustaka-terbuka.github.io/marc-retriever/kik?isbn=9789831665541
+        </a>
+      </div>
+    </div>
+
+    <div class="endpoint-box">
+      <div>
+        <span class="badge-method">GET</span>
         <a href="./pnm?isbn=9789831665541" target="_blank">
           https://pustaka-terbuka.github.io/marc-retriever/pnm?isbn=9789831665541
         </a>
@@ -460,8 +469,19 @@ HTML_CONTENT = f"""<!DOCTYPE html>
     <div class="endpoint-box">
       <div>
         <span class="badge-method">GET</span>
-        <a href="./pnm?isbn=9789831665541&raw=true" target="_blank">
-          https://pustaka-terbuka.github.io/marc-retriever/pnm?isbn=9789831665541&raw=true
+        <a href="./kik?isbn=9789831665541&raw=true" target="_blank">
+          https://pustaka-terbuka.github.io/marc-retriever/kik?isbn=9789831665541&raw=true
+        </a>
+      </div>
+    </div>
+
+    <h2 style="margin-top: 2rem;">📡 Machine-Readable Providers Directory (JSON)</h2>
+    <p>External applications, ILS systems (such as ErrinILS), copy-cataloguing tools, and scrapers can dynamically query the live providers list, endpoints, and URL templates:</p>
+    <div class="endpoint-box">
+      <div>
+        <span class="badge-method">GET</span>
+        <a href="./providers.json" target="_blank">
+          https://pustaka-terbuka.github.io/marc-retriever/providers.json
         </a>
       </div>
     </div>
@@ -470,7 +490,8 @@ HTML_CONTENT = f"""<!DOCTYPE html>
 
 <footer>
   <p>
-    Powered by <a href="https://github.com/pustaka-terbuka" target="_blank">Pustaka Terbuka</a> &bull; Open Metadata & Public Library Technology &bull;
+    Powered by <a href="https://github.com/pustaka-terbuka" target="_blank">Pustaka Terbuka</a> &bull; 
+    <a href="./providers.json" target="_blank">providers.json</a> &bull;
     <a href="https://github.com/pustaka-terbuka/marc-retriever" target="_blank">GitHub Repository</a>
   </p>
 </footer>
