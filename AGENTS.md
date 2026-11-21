@@ -10,21 +10,29 @@ Welcome to **marc-retriever** (`pustaka-terbuka/marc-retriever`). This document 
 * **Organization**: [Pustaka Terbuka](https://github.com/pustaka-terbuka)
 * **Live Deployment**: [https://pustaka-terbuka.github.io/marc-retriever/](https://pustaka-terbuka.github.io/marc-retriever/)
 * **Repository**: [https://github.com/pustaka-terbuka/marc-retriever](https://github.com/pustaka-terbuka/marc-retriever)
-* **Core Function**: Universal web retriever to extract complete **MARC21 bibliographic records** in structured JSON format from Perpustakaan Negara Malaysia (PNM) and Malaysian State Public Libraries via clean URL query strings.
-* **Primary Target Route**:
-  `https://pustaka-terbuka.github.io/marc-retriever/pnm?isbn=<ISBN>`
+* **Core Function**: Universal web retriever to extract complete **MARC21 bibliographic records** in structured JSON format from Perpustakaan Negara Malaysia (PNM) and all 16 Malaysian State and Federal Territory Public Libraries via clean URL query strings.
+* **Target Clean Routes**:
+  - `https://pustaka-terbuka.github.io/marc-retriever/{code}?isbn=<ISBN>`
+  - Append `&raw=true` for machine-friendly raw JSON output.
+* **Excluded Catalog**: `kik` (Katalog Induk Kebangsaan / National Union Catalog) is excluded from this implementation per explicit specification.
 
 ---
 
 ## 2. Core Architectural Principles
 
-1. **Zero External Dependencies**: Static HTML5, CSS3, and ES6+ JavaScript. No build steps, no Node bundlers (Vite/Webpack), no external CSS frameworks.
+1. **Zero External Runtime Dependencies**: Static HTML5, CSS3, and ES6+ JavaScript. No build steps, no Node bundlers (Vite/Webpack), no external CSS frameworks.
 2. **Provider Modular Routing**:
-   - Central Hub: `index.html` (portal and library picker).
-   - Dedicated Library Endpoints: Each provider resides in its own directory (e.g. `pnm/index.html`) so GitHub Pages serves `/pnm?isbn=...` natively.
-   - SPA Fallback: `404.html` dynamically parses path segments (`/<library>?isbn=...`) and routes to the matching provider.
-3. **Direct Client-Side CORS**: The client browser fetches records directly from library API gateways that support CORS without intermediate proxy servers.
-4. **Query String Driven**: Any route accepting `?isbn=<ISBN>` automatically executes retrieval on page load. Appending `&raw=true` outputs pure unstyled JSON.
+   - Central Hub: `index.html` (portal, provider selector, and provider directory cards).
+   - Dedicated Library Endpoints: Each of the 17 providers resides in its own physical directory (`{code}/index.html`) so GitHub Pages serves `/{code}?isbn=...` natively without 404s.
+   - SPA Fallback Router: `404.html` dynamically parses path segments (`/<library>?isbn=...`) and reroutes seamlessly to the matching provider.
+3. **Dual-Tier Resolution**:
+   - **Direct Vega Cloud APIs** (`pnm`, `ppas`): Directly queries public Clarivate Vega Discover Cloud APIs (`https://ap.iiivega.com`) with client-side CORS headers.
+   - **On-Premise Koha & WebOPAC Portals**: Koha OPAC endpoints (`ppap`, `ppanpk`, `ppank`, `ppanps`) and WebOPAC portals (`ppanj`, `ppak`, `ppat`, `ppaph`, `ppans`, `perpustam`, `pustaka`, `pns`, `pkl`, `ppj`, `ppl`).
+   - **Automatic National Legal Deposit Fallback**: If a local branch does not hold an item or if browser CORS blocks on-premise servers, records are resolved via the central legal deposit index (PNM) with clear provenance metadata (`resolvedVia: "National Central Index (PNM)"`, `holdingInLibrary: false`).
+4. **Multi-Format In-Memory Exporter**: Automatically parses and exports records into:
+   - Structured JSON schema (`records[].marcRecord`)
+   - MarcEdit tagged text (`records[].marcText`, `.mrk`)
+   - Validated MARCXML (`records[].marcXml`, `.xml`)
 
 ---
 
@@ -39,56 +47,71 @@ D:/GitHub/pustaka-terbuka/marc-retriever/
 ├── LICENSE                    # MIT License
 ├── README.md                  # Public documentation & provider status
 ├── index.html                 # Central multi-library hub & library directory
-└── pnm/
-    └── index.html             # Dedicated PNM retriever endpoint (/pnm?isbn=...)
+├── js/
+│   └── retriever.js           # Shared universal retrieval engine & registry
+├── tools/
+│   ├── generate_providers.py  # Generates dedicated {code}/index.html provider pages
+│   ├── update_hub_index.py    # Updates hub index.html with all active cards
+│   └── test_all_providers.js  # Automated sequential test runner for all 17 libraries
+└── {code}/                    # 17 Dedicated provider directories
+    ├── pnm/index.html         # Perpustakaan Negara Malaysia
+    ├── ppas/index.html        # Perbadanan Perpustakaan Awam Selangor
+    ├── ppap/index.html        # Perbadanan Perpustakaan Awam Pulau Pinang
+    ├── ppanj/index.html       # Perbadanan Perpustakaan Awam Negeri Johor
+    ├── ppanpk/index.html      # Perbadanan Perpustakaan Awam Negeri Perak
+    ├── ppank/index.html       # Perbadanan Perpustakaan Awam Negeri Kedah
+    ├── ppak/index.html        # Perbadanan Perpustakaan Awam Kelantan
+    ├── ppat/index.html        # Perbadanan Perpustakaan Awam Terengganu
+    ├── ppaph/index.html       # Perbadanan Perpustakaan Awam Pahang
+    ├── ppans/index.html       # Perbadanan Perpustakaan Awam Negeri Sembilan
+    ├── perpustam/index.html   # Perbadanan Perpustakaan Awam Melaka
+    ├── ppanps/index.html      # Perbadanan Perpustakaan Awam Negeri Perlis
+    ├── pustaka/index.html     # Pustaka Negeri Sarawak
+    ├── pns/index.html         # Perpustakaan Negeri Sabah
+    ├── pkl/index.html         # Perpustakaan Kuala Lumpur
+    ├── ppj/index.html         # Perpustakaan Awam Putrajaya
+    └── ppl/index.html         # Perpustakaan Awam Perbadanan Labuan
 ```
 
 ---
 
-## 4. Library Providers Roadmap
+## 4. Library Providers Registry
 
-| Provider Code | Institution | System Architecture | Status |
-| :--- | :--- | :--- | :--- |
-| **`pnm`** | **Perpustakaan Negara Malaysia** | Vega Discover API (`ap.iiivega.com`) | 🟢 **Active** |
-| **`ppas`** | Perbadanan Perpustakaan Awam Selangor | Koha REST API / SRU | 🟡 Planned |
-| **`ppap`** | Perbadanan Perpustakaan Awam P. Pinang | Koha / ILMU | 🟡 Planned |
-| **`pustaka`** | Pustaka Negeri Sarawak | Virtua / Chamo / Koha | 🟡 Planned |
-
----
-
-## 5. PNM Provider Specification (`pnm/index.html`)
-
-### 5.1 Endpoint Contract
-* **URL**: `https://pustaka-terbuka.github.io/marc-retriever/pnm?isbn=<ISBN>`
-* **Raw JSON**: `https://pustaka-terbuka.github.io/marc-retriever/pnm?isbn=<ISBN>&raw=true`
-
-### 5.2 Retrieval Pipeline
-1. **Search**: `POST https://ap.iiivega.com/api/search-result/search/format-groups`
-   - Headers: `api-version: 2`, `iii-customer-domain: pnm.ap.iiivega.com`, `iii-host-domain: opac.pnm.gov.my`, dynamic `Anonymous-User-Id` UUID v4.
-   - Body: `{"searchText": "<cleaned-isbn>"}`
-2. **MARC Fetch**: `GET https://ap.iiivega.com/api/search-result/editions/{editionId}`
-   - Headers: `api-version: 1`, `iii-customer-domain: pnm.ap.iiivega.com`, `iii-host-domain: opac.pnm.gov.my`.
-   - Returns full MARC21 object (`leader`, `controlFields`, `dataFields`).
+| # | Code | Library Name | State / Territory | Engine Type | Direct URL / Portal |
+| :---: | :--- | :--- | :--- | :--- | :--- |
+| 1 | `pnm` | Perpustakaan Negara Malaysia | National (Malaysia) | Vega Discover | `https://opac.pnm.gov.my/` |
+| 2 | `ppas` | Perbadanan Perpustakaan Awam Selangor | Selangor | Vega Discover | `https://ppas.ap.iiivega.com/` |
+| 3 | `ppap` | Perbadanan Perpustakaan Awam Pulau Pinang | Pulau Pinang | Koha OPAC | `https://opac.penanglib.gov.my` |
+| 4 | `ppanj` | Perbadanan Perpustakaan Awam Negeri Johor | Johor | WebOPAC | `https://ppaj.johor.gov.my` |
+| 5 | `ppanpk` | Perbadanan Perpustakaan Awam Negeri Perak | Perak | Koha OPAC | `https://opac.ppanpk.gov.my` |
+| 6 | `ppank` | Perbadanan Perpustakaan Awam Negeri Kedah | Kedah | Koha OPAC | `http://opac.kedahlib.gov.my` |
+| 7 | `ppak` | Perbadanan Perpustakaan Awam Kelantan | Kelantan | WebOPAC | `https://www.kelantanlibrary.gov.my` |
+| 8 | `ppat` | Perbadanan Perpustakaan Awam Terengganu | Terengganu | WebOPAC | `https://www.trglib.gov.my` |
+| 9 | `ppaph` | Perbadanan Perpustakaan Awam Pahang | Pahang | WebOPAC | `https://pahanglibrary.gov.my` |
+| 10 | `ppans` | Perbadanan Perpustakaan Awam Negeri Sembilan | Negeri Sembilan | WebOPAC | `https://www.nslibrary.gov.my` |
+| 11 | `perpustam` | Perbadanan Perpustakaan Awam Melaka | Melaka | WebOPAC | `https://perpustam.gov.my` |
+| 12 | `ppanps` | Perbadanan Perpustakaan Awam Negeri Perlis | Perlis | Koha OPAC | `http://opac.perlislib.gov.my` |
+| 13 | `pustaka` | Pustaka Negeri Sarawak | Sarawak | WebOPAC | `https://www.pustaka-sarawak.com` |
+| 14 | `pns` | Perpustakaan Negeri Sabah | Sabah | WebOPAC | `https://library.sabah.gov.my` |
+| 15 | `pkl` | Perpustakaan Kuala Lumpur | W.P. Kuala Lumpur | WebOPAC | `https://www.dbkl.gov.my` |
+| 16 | `ppj` | Perpustakaan Awam Putrajaya | W.P. Putrajaya | WebOPAC | `https://library.ppj.gov.my` |
+| 17 | `ppl` | Perpustakaan Awam Perbadanan Labuan | W.P. Labuan | WebOPAC | `https://www.pl.gov.my` |
 
 ---
 
-## 6. Testing & Deployment Workflow
+## 5. Developer & Agent Guidelines
 
-### Local Preview
-```powershell
-cd D:\GitHub\pustaka-terbuka\marc-retriever
-python -m http.server 8000
-```
-Test endpoints:
-* Hub: `http://localhost:8000/`
-* PNM Provider: `http://localhost:8000/pnm/?isbn=9789831665541`
-* Raw JSON: `http://localhost:8000/pnm/?isbn=9789831665541&raw=true`
-
-### Deploying Changes
-Pushing to `main` automatically triggers GitHub Pages build:
-```powershell
-cd D:\GitHub\pustaka-terbuka\marc-retriever
-git add .
-git commit -m "feat: enhance marc-retriever"
-git push origin main
-```
+1. **No External CDNs or Runtime Dependencies**: Do not introduce jQuery, Bootstrap, React, or npm dependencies to the runtime. All frontend assets must remain vanilla HTML5/CSS3/ES6.
+2. **Preserve Clean URLs**: Keep `404.html` and `.nojekyll` intact at the repository root.
+3. **Safety & Copyright Compliance**:
+   - Never print or commit full copyrighted text, complete bibliographic abstracts, or real-world publication contents in automated agent responses or public documentation.
+   - Use synthetic or generic placeholders (`SAMPLE TITLE`, `GENERIC AUTHOR`) for code samples and mock schemas.
+4. **Testing Workflow**:
+   - Before pushing updates, always run the automated sequential test suite:
+     ```bash
+     node tools/test_all_providers.js
+     ```
+   - Ensure all 17 public libraries pass verification with valid MARC21 JSON, `.mrk`, and MARCXML structures.
+5. **Generator Scripts**:
+   - If provider HTML templates are modified, re-run `python tools/generate_providers.py` to regenerate all 17 directories consistently.
+   - If provider cards or registry entries are updated, re-run `python tools/update_hub_index.py` to keep the root hub in sync.

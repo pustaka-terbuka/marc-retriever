@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>marc-retriever - Malaysian Libraries MARC21 Lookup Hub</title>
-  <meta name="description" content="Universal MARC21 bibliographic records retriever for Malaysian National and Public Libraries. Extract MARC JSON via simple URL query strings.">
+  <title>marc-retriever: Universal Malaysian Public Libraries MARC21 Engine</title>
+  <meta name="description" content="Retrieve MARC21 bibliographic records in JSON format from all Malaysian public libraries via URL query string.">
   <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📚</text></svg>">
   <style>
     :root {
@@ -19,6 +19,7 @@
       --accent-hover: #0ea5e9;
       --accent-gold: #f59e0b;
       --accent-green: #10b981;
+      --accent-rose: #f43f5e;
       --font-mono: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier, monospace;
       --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
     }
@@ -36,35 +37,36 @@
 
     .container {
       width: 100%;
-      max-width: 1050px;
+      max-width: 1100px;
       margin: 0 auto;
       padding: 2.5rem 1.25rem 4rem;
       flex: 1;
     }
 
     header {
-      margin-bottom: 2.5rem;
       text-align: center;
+      margin-bottom: 2.5rem;
     }
     .badge {
       display: inline-flex;
       align-items: center;
-      gap: 0.4rem;
+      gap: 0.5rem;
       background: rgba(56, 189, 248, 0.12);
       color: var(--accent);
       border: 1px solid rgba(56, 189, 248, 0.3);
-      padding: 0.25rem 0.85rem;
+      padding: 0.35rem 0.85rem;
       border-radius: 9999px;
       font-size: 0.82rem;
       font-weight: 600;
-      margin-bottom: 0.8rem;
+      margin-bottom: 1rem;
+      letter-spacing: 0.03em;
     }
     h1 {
-      font-size: 2.5rem;
+      font-size: 2.4rem;
       font-weight: 800;
       color: #fff;
       letter-spacing: -0.02em;
-      margin-bottom: 0.5rem;
+      margin-bottom: 0.6rem;
     }
     h1 .highlight {
       color: var(--accent);
@@ -72,121 +74,116 @@
     .subtitle {
       color: var(--text-muted);
       font-size: 1.05rem;
-      max-width: 700px;
+      max-width: 720px;
       margin: 0 auto;
     }
 
-    .search-section {
-      background: var(--bg-secondary);
+    .search-card {
+      background: var(--bg-card);
       border: 1px solid var(--border);
       border-radius: 16px;
-      padding: 1.5rem;
+      padding: 2rem;
       margin-bottom: 2.5rem;
-      box-shadow: 0 12px 30px -5px rgba(0, 0, 0, 0.35);
+      box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5);
     }
     .search-form {
       display: flex;
-      gap: 0.75rem;
-      flex-wrap: wrap;
-      margin-bottom: 0.85rem;
+      flex-direction: column;
+      gap: 1rem;
+    }
+    @media (min-width: 768px) {
+      .search-form {
+        flex-direction: row;
+      }
     }
     .select-wrapper {
-      min-width: 260px;
-    }
-    select {
-      width: 100%;
-      background: var(--bg-card);
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      padding: 0.8rem 1rem;
-      color: var(--text-main);
-      font-size: 0.95rem;
-      font-weight: 600;
-      outline: none;
-      cursor: pointer;
-      transition: border-color 0.2s;
-    }
-    select:focus {
-      border-color: var(--accent);
+      flex: 1.2;
     }
     .input-wrapper {
-      position: relative;
-      flex: 1;
-      min-width: 250px;
+      flex: 1.8;
     }
-    .input-wrapper input {
+    select, input[type="text"] {
       width: 100%;
-      background: var(--bg-card);
+      padding: 0.9rem 1.1rem;
+      background: var(--bg-code);
       border: 1px solid var(--border);
       border-radius: 10px;
-      padding: 0.8rem 1rem;
       color: var(--text-main);
-      font-size: 1.05rem;
-      font-family: var(--font-mono);
+      font-size: 0.95rem;
       outline: none;
       transition: border-color 0.2s, box-shadow 0.2s;
     }
-    .input-wrapper input:focus {
+    select:focus, input[type="text"]:focus {
       border-color: var(--accent);
       box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.2);
     }
-    .search-form button {
+    button {
       background: var(--accent);
-      color: #04121d;
-      font-weight: 700;
+      color: #0b1120;
       border: none;
-      padding: 0 1.8rem;
       border-radius: 10px;
-      font-size: 1rem;
+      padding: 0.9rem 1.75rem;
+      font-weight: 700;
+      font-size: 0.95rem;
       cursor: pointer;
-      transition: background 0.2s, transform 0.1s;
-      display: inline-flex;
+      display: flex;
       align-items: center;
+      justify-content: center;
       gap: 0.5rem;
+      transition: background-color 0.2s, transform 0.1s;
     }
-    .search-form button:hover {
+    button:hover {
       background: var(--accent-hover);
     }
-    .search-form button:active {
+    button:active {
       transform: scale(0.98);
     }
 
     .examples {
+      margin-top: 1rem;
       display: flex;
-      align-items: center;
       flex-wrap: wrap;
+      align-items: center;
       gap: 0.5rem;
       font-size: 0.85rem;
       color: var(--text-muted);
     }
     .example-tag {
-      background: var(--bg-card);
+      background: var(--bg-secondary);
       border: 1px solid var(--border);
-      color: var(--text-muted);
-      padding: 0.2rem 0.55rem;
+      padding: 0.25rem 0.6rem;
       border-radius: 6px;
       cursor: pointer;
       font-family: var(--font-mono);
-      font-size: 0.8rem;
-      transition: color 0.15s, border-color 0.15s;
+      transition: all 0.15s;
     }
     .example-tag:hover {
-      color: var(--accent);
       border-color: var(--accent);
+      color: var(--accent);
     }
 
     .section-title {
-      font-size: 1.35rem;
+      font-size: 1.3rem;
       font-weight: 700;
+      margin-bottom: 1.25rem;
       color: #fff;
-      margin-bottom: 1rem;
       display: flex;
       align-items: center;
-      gap: 0.5rem;
+      justify-content: space-between;
     }
+    .section-count {
+      font-size: 0.85rem;
+      font-weight: 600;
+      background: rgba(16, 185, 129, 0.15);
+      color: var(--accent-green);
+      border: 1px solid rgba(16, 185, 129, 0.3);
+      padding: 0.2rem 0.6rem;
+      border-radius: 9999px;
+    }
+
     .grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(310px, 1fr));
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
       gap: 1.25rem;
       margin-bottom: 2.5rem;
     }
@@ -197,6 +194,8 @@
       padding: 1.25rem;
       transition: border-color 0.2s, transform 0.15s;
       position: relative;
+      display: flex;
+      flex-direction: column;
     }
     .lib-card:hover {
       border-color: var(--accent);
@@ -218,7 +217,7 @@
       font-weight: 700;
     }
     .status-pill {
-      font-size: 0.75rem;
+      font-size: 0.72rem;
       padding: 0.15rem 0.5rem;
       border-radius: 9999px;
       font-weight: 700;
@@ -228,94 +227,105 @@
       color: var(--accent-green);
       border: 1px solid rgba(16, 185, 129, 0.3);
     }
-    .status-planned {
-      background: rgba(148, 163, 184, 0.15);
-      color: var(--text-muted);
-      border: 1px solid rgba(148, 163, 184, 0.25);
-    }
     .lib-name {
       font-size: 1.05rem;
       font-weight: 700;
       color: #fff;
-      margin-bottom: 0.3rem;
+      margin-bottom: 0.25rem;
+    }
+    .lib-state-engine {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      margin-bottom: 0.6rem;
+    }
+    .lib-state-engine code {
+      font-family: var(--font-mono);
+      color: var(--accent-gold);
     }
     .lib-desc {
+      font-size: 0.85rem;
       color: var(--text-muted);
-      font-size: 0.86rem;
-      margin-bottom: 0.85rem;
+      line-height: 1.45;
+      margin-bottom: 1rem;
+      flex: 1;
     }
     .lib-endpoint {
-      background: var(--bg-code);
-      padding: 0.5rem 0.75rem;
-      border-radius: 6px;
+      display: inline-block;
       font-family: var(--font-mono);
       font-size: 0.8rem;
       color: var(--accent);
       text-decoration: none;
-      display: block;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
+      word-break: break-all;
+      background: var(--bg-code);
+      padding: 0.4rem 0.6rem;
+      border-radius: 6px;
+      border: 1px solid var(--border);
+      transition: background 0.15s, border-color 0.15s;
     }
     .lib-endpoint:hover {
-      text-decoration: underline;
+      background: rgba(56, 189, 248, 0.1);
+      border-color: var(--accent);
     }
 
     .docs-card {
-      background: var(--bg-secondary);
+      background: var(--bg-card);
       border: 1px solid var(--border);
-      border-radius: 14px;
-      padding: 1.5rem;
-      margin-bottom: 2rem;
+      border-radius: 16px;
+      padding: 2rem;
+      margin-bottom: 2.5rem;
     }
     .docs-card h2 {
       font-size: 1.25rem;
-      margin-bottom: 0.75rem;
-      color: var(--accent);
+      color: #fff;
+      margin-bottom: 1rem;
     }
     .docs-card p {
       color: var(--text-muted);
       font-size: 0.95rem;
       margin-bottom: 1rem;
     }
+    .docs-card code {
+      font-family: var(--font-mono);
+      color: var(--accent);
+      background: var(--bg-code);
+      padding: 0.15rem 0.4rem;
+      border-radius: 4px;
+      font-size: 0.9em;
+    }
     .endpoint-box {
       background: var(--bg-code);
       border: 1px solid var(--border);
       border-radius: 8px;
-      padding: 0.75rem 1rem;
+      padding: 0.85rem 1.1rem;
       font-family: var(--font-mono);
-      font-size: 0.9rem;
-      margin-bottom: 0.75rem;
-      color: #38bdf8;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      overflow-x: auto;
+      font-size: 0.88rem;
+      color: var(--accent-green);
+      margin-bottom: 1rem;
+      word-break: break-all;
     }
     .endpoint-box a {
-      color: #38bdf8;
+      color: var(--accent-green);
       text-decoration: none;
     }
     .endpoint-box a:hover {
       text-decoration: underline;
     }
     .badge-method {
-      background: #10b981;
-      color: #032b1d;
-      font-size: 0.75rem;
-      font-weight: 800;
-      padding: 0.15rem 0.5rem;
+      background: rgba(16, 185, 129, 0.2);
+      color: var(--accent-green);
+      padding: 0.15rem 0.45rem;
       border-radius: 4px;
+      font-size: 0.75rem;
+      font-weight: 700;
       margin-right: 0.5rem;
     }
 
     footer {
       border-top: 1px solid var(--border);
+      padding: 2rem 1.25rem;
       text-align: center;
-      padding: 1.5rem;
       color: var(--text-muted);
       font-size: 0.85rem;
-      background: var(--bg-primary);
     }
     footer a {
       color: var(--accent);
@@ -330,26 +340,43 @@
 
 <div class="container">
   <header>
-    <div class="badge">🇲🇾 Malaysian Libraries MARC21 Engine</div>
-    <h1>marc<span class="highlight">-retriever</span></h1>
-    <p class="subtitle">Universal web retriever to extract complete MARC21 records in JSON format from Perpustakaan Negara Malaysia and Malaysian Public Libraries.</p>
+    <div class="badge">
+      <span>🇲🇾</span> Universal Malaysian Public Libraries Engine
+    </div>
+    <h1>marc-<span class="highlight">retriever</span></h1>
+    <p class="subtitle">
+      Zero-dependency, client-side web application resolving MARC21 bibliographic records in JSON, MarcEdit (.mrk), and MARCXML format across all Malaysian public libraries via clean URL query strings.
+    </p>
   </header>
 
-  <div class="search-section">
-    <form class="search-form" onsubmit="handleUniversalSearch(event)">
+  <div class="search-card">
+    <form class="search-form" id="searchForm" onsubmit="handleUniversalSearch(event)">
       <div class="select-wrapper">
         <select id="librarySelect">
-          <option value="pnm">🇲🇾 PNM (Perpustakaan Negara Malaysia)</option>
-          <option value="ppas" disabled>Perbadanan Perpustakaan Awam Selangor (Coming Soon)</option>
-          <option value="ppap" disabled>Perbadanan Perpustakaan Awam P. Pinang (Coming Soon)</option>
-          <option value="pustaka" disabled>Pustaka Negeri Sarawak (Coming Soon)</option>
+            <option value="pnm">🇲🇾 PNM - Perpustakaan Negara Malaysia (National (Malaysia))</option>
+            <option value="ppas">🔴🟡 PPAS - Perbadanan Perpustakaan Awam Selangor (Selangor)</option>
+            <option value="ppap">🟡🔵 PPAP - Perbadanan Perpustakaan Awam Pulau Pinang (Pulau Pinang)</option>
+            <option value="ppanj">🔵🔴 PPANJ - Perbadanan Perpustakaan Awam Negeri Johor (Johor)</option>
+            <option value="ppanpk">⚪🟡⚫ PPANPK - Perbadanan Perpustakaan Awam Negeri Perak (Perak)</option>
+            <option value="ppank">🔴🟢 PPANK - Perbadanan Perpustakaan Awam Negeri Kedah (Kedah)</option>
+            <option value="ppak">🔴⚪ PPAK - Perbadanan Perpustakaan Awam Kelantan (Kelantan)</option>
+            <option value="ppat">⚪⚫ PPAT - Perbadanan Perpustakaan Awam Terengganu (Terengganu)</option>
+            <option value="ppaph">⚪⚫ PPAPH - Perbadanan Perpustakaan Awam Pahang (Pahang)</option>
+            <option value="ppans">🟡🔴⚫ PPANS - Perbadanan Perpustakaan Awam Negeri Sembilan (Negeri Sembilan)</option>
+            <option value="perpustam">🔵🔴⚪ PERPUSTAM - Perbadanan Perpustakaan Awam Melaka (Melaka)</option>
+            <option value="ppanps">🟡🔵 PPANPS - Perbadanan Perpustakaan Awam Negeri Perlis (Perlis)</option>
+            <option value="pustaka">🔴🟡⚫ PUSTAKA - Pustaka Negeri Sarawak (Sarawak)</option>
+            <option value="pns">🔵⚪🔴 PNS - Perpustakaan Negeri Sabah (Sabah)</option>
+            <option value="pkl">🔴⚪🔵 PKL - Perpustakaan Kuala Lumpur (W.P. Kuala Lumpur)</option>
+            <option value="ppj">🟡🔵🔴 PPJ - Perpustakaan Awam Putrajaya (W.P. Putrajaya)</option>
+            <option value="ppl">🔴⚪🔵 PPL - Perpustakaan Awam Perbadanan Labuan (W.P. Labuan)</option>
         </select>
       </div>
       <div class="input-wrapper">
         <input 
           type="text" 
           id="isbnInput" 
-          placeholder="Enter ISBN (e.g. 9789831665541 or 0755438140)" 
+          placeholder="Enter ISBN (e.g. 9789831665541 or 9678915006)" 
           autocomplete="off" 
           autofocus 
         />
@@ -362,69 +389,242 @@
     <div class="examples">
       <span>Try sample ISBNs:</span>
       <span class="example-tag" onclick="quickFill('9789831665541')">9789831665541</span>
+      <span class="example-tag" onclick="quickFill('9678915006')">9678915006</span>
       <span class="example-tag" onclick="quickFill('0755438140')">0755438140</span>
-      <span class="example-tag" onclick="quickFill('9789674880000')">9789674880000</span>
     </div>
   </div>
 
-  <div class="section-title">🏛️ Library Providers Directory</div>
+  <div class="section-title">
+    <span>🏛️ Library Providers Directory</span>
+    <span class="section-count">17 Active Providers</span>
+  </div>
   <div class="grid">
-    <!-- PNM Card -->
-    <div class="lib-card">
-      <div class="lib-card-header">
-        <span class="lib-code">/pnm</span>
-        <span class="status-pill status-active">Active</span>
+      <!-- PNM Card -->
+      <div class="lib-card">
+        <div class="lib-card-header">
+          <span class="lib-code">/pnm</span>
+          <span class="status-pill status-active">Active</span>
+        </div>
+        <div class="lib-name">🇲🇾 Perpustakaan Negara Malaysia</div>
+        <div class="lib-state-engine"><span>National (Malaysia)</span> &bull; <code>Vega Discover</code></div>
+        <div class="lib-desc">National library legal deposit & central bibliographic repository.</div>
+        <a class="lib-endpoint" href="./pnm?isbn=9789831665541">
+          GET ./pnm?isbn=9789831665541 &rarr;
+        </a>
       </div>
-      <div class="lib-name">Perpustakaan Negara Malaysia</div>
-      <div class="lib-desc">National library repository powered by Vega Discover OPAC with direct client-side MARC21 extraction.</div>
-      <a class="lib-endpoint" href="./pnm?isbn=9789831665541">
-        GET ./pnm?isbn=9789831665541 &rarr;
-      </a>
-    </div>
-
-    <!-- PPAS Card -->
-    <div class="lib-card">
-      <div class="lib-card-header">
-        <span class="lib-code">/ppas</span>
-        <span class="status-pill status-planned">Planned</span>
+      <!-- PPAS Card -->
+      <div class="lib-card">
+        <div class="lib-card-header">
+          <span class="lib-code">/ppas</span>
+          <span class="status-pill status-active">Active</span>
+        </div>
+        <div class="lib-name">🔴🟡 Perbadanan Perpustakaan Awam Selangor</div>
+        <div class="lib-state-engine"><span>Selangor</span> &bull; <code>Vega Discover</code></div>
+        <div class="lib-desc">Selangor state public library network & Raja Tun Uda central repository.</div>
+        <a class="lib-endpoint" href="./ppas?isbn=9789831665541">
+          GET ./ppas?isbn=9789831665541 &rarr;
+        </a>
       </div>
-      <div class="lib-name">Perpustakaan Awam Selangor</div>
-      <div class="lib-desc">Selangor state public library network (Koha ILS integration).</div>
-      <span class="lib-endpoint" style="opacity: 0.6; cursor: default;">
-        GET ./ppas?isbn=&lt;ISBN&gt; (In Progress)
-      </span>
-    </div>
-
-    <!-- PPAP Card -->
-    <div class="lib-card">
-      <div class="lib-card-header">
-        <span class="lib-code">/ppap</span>
-        <span class="status-pill status-planned">Planned</span>
+      <!-- PPAP Card -->
+      <div class="lib-card">
+        <div class="lib-card-header">
+          <span class="lib-code">/ppap</span>
+          <span class="status-pill status-active">Active</span>
+        </div>
+        <div class="lib-name">🟡🔵 Perbadanan Perpustakaan Awam Pulau Pinang</div>
+        <div class="lib-state-engine"><span>Pulau Pinang</span> &bull; <code>Koha OPAC</code></div>
+        <div class="lib-desc">Penang state public library consortium and community branches.</div>
+        <a class="lib-endpoint" href="./ppap?isbn=9789831665541">
+          GET ./ppap?isbn=9789831665541 &rarr;
+        </a>
       </div>
-      <div class="lib-name">Perpustakaan Awam P. Pinang</div>
-      <div class="lib-desc">Penang state public library consortium and community branches.</div>
-      <span class="lib-endpoint" style="opacity: 0.6; cursor: default;">
-        GET ./ppap?isbn=&lt;ISBN&gt; (In Progress)
-      </span>
-    </div>
-
-    <!-- Pustaka Sarawak Card -->
-    <div class="lib-card">
-      <div class="lib-card-header">
-        <span class="lib-code">/pustaka</span>
-        <span class="status-pill status-planned">Planned</span>
+      <!-- PPANJ Card -->
+      <div class="lib-card">
+        <div class="lib-card-header">
+          <span class="lib-code">/ppanj</span>
+          <span class="status-pill status-active">Active</span>
+        </div>
+        <div class="lib-name">🔵🔴 Perbadanan Perpustakaan Awam Negeri Johor</div>
+        <div class="lib-state-engine"><span>Johor</span> &bull; <code>WebOPAC</code></div>
+        <div class="lib-desc">Johor state public library corporation & community networks.</div>
+        <a class="lib-endpoint" href="./ppanj?isbn=9789831665541">
+          GET ./ppanj?isbn=9789831665541 &rarr;
+        </a>
       </div>
-      <div class="lib-name">Pustaka Negeri Sarawak</div>
-      <div class="lib-desc">Sarawak state library and legal deposit bibliographic repository.</div>
-      <span class="lib-endpoint" style="opacity: 0.6; cursor: default;">
-        GET ./pustaka?isbn=&lt;ISBN&gt; (In Progress)
-      </span>
-    </div>
+      <!-- PPANPK Card -->
+      <div class="lib-card">
+        <div class="lib-card-header">
+          <span class="lib-code">/ppanpk</span>
+          <span class="status-pill status-active">Active</span>
+        </div>
+        <div class="lib-name">⚪🟡⚫ Perbadanan Perpustakaan Awam Negeri Perak</div>
+        <div class="lib-state-engine"><span>Perak</span> &bull; <code>Koha OPAC</code></div>
+        <div class="lib-desc">Perak state public library system and municipal branches.</div>
+        <a class="lib-endpoint" href="./ppanpk?isbn=9789831665541">
+          GET ./ppanpk?isbn=9789831665541 &rarr;
+        </a>
+      </div>
+      <!-- PPANK Card -->
+      <div class="lib-card">
+        <div class="lib-card-header">
+          <span class="lib-code">/ppank</span>
+          <span class="status-pill status-active">Active</span>
+        </div>
+        <div class="lib-name">🔴🟢 Perbadanan Perpustakaan Awam Negeri Kedah</div>
+        <div class="lib-state-engine"><span>Kedah</span> &bull; <code>Koha OPAC</code></div>
+        <div class="lib-desc">Kedah state public library network and district services.</div>
+        <a class="lib-endpoint" href="./ppank?isbn=9789831665541">
+          GET ./ppank?isbn=9789831665541 &rarr;
+        </a>
+      </div>
+      <!-- PPAK Card -->
+      <div class="lib-card">
+        <div class="lib-card-header">
+          <span class="lib-code">/ppak</span>
+          <span class="status-pill status-active">Active</span>
+        </div>
+        <div class="lib-name">🔴⚪ Perbadanan Perpustakaan Awam Kelantan</div>
+        <div class="lib-state-engine"><span>Kelantan</span> &bull; <code>WebOPAC</code></div>
+        <div class="lib-desc">Kelantan state public library network and resource centers.</div>
+        <a class="lib-endpoint" href="./ppak?isbn=9789831665541">
+          GET ./ppak?isbn=9789831665541 &rarr;
+        </a>
+      </div>
+      <!-- PPAT Card -->
+      <div class="lib-card">
+        <div class="lib-card-header">
+          <span class="lib-code">/ppat</span>
+          <span class="status-pill status-active">Active</span>
+        </div>
+        <div class="lib-name">⚪⚫ Perbadanan Perpustakaan Awam Terengganu</div>
+        <div class="lib-state-engine"><span>Terengganu</span> &bull; <code>WebOPAC</code></div>
+        <div class="lib-desc">Terengganu public library corporation & regional divisions.</div>
+        <a class="lib-endpoint" href="./ppat?isbn=9789831665541">
+          GET ./ppat?isbn=9789831665541 &rarr;
+        </a>
+      </div>
+      <!-- PPAPH Card -->
+      <div class="lib-card">
+        <div class="lib-card-header">
+          <span class="lib-code">/ppaph</span>
+          <span class="status-pill status-active">Active</span>
+        </div>
+        <div class="lib-name">⚪⚫ Perbadanan Perpustakaan Awam Pahang</div>
+        <div class="lib-state-engine"><span>Pahang</span> &bull; <code>WebOPAC</code></div>
+        <div class="lib-desc">Pahang state public library network and rural library services.</div>
+        <a class="lib-endpoint" href="./ppaph?isbn=9789831665541">
+          GET ./ppaph?isbn=9789831665541 &rarr;
+        </a>
+      </div>
+      <!-- PPANS Card -->
+      <div class="lib-card">
+        <div class="lib-card-header">
+          <span class="lib-code">/ppans</span>
+          <span class="status-pill status-active">Active</span>
+        </div>
+        <div class="lib-name">🟡🔴⚫ Perbadanan Perpustakaan Awam Negeri Sembilan</div>
+        <div class="lib-state-engine"><span>Negeri Sembilan</span> &bull; <code>WebOPAC</code></div>
+        <div class="lib-desc">Negeri Sembilan public library system and mobile library units.</div>
+        <a class="lib-endpoint" href="./ppans?isbn=9789831665541">
+          GET ./ppans?isbn=9789831665541 &rarr;
+        </a>
+      </div>
+      <!-- PERPUSTAM Card -->
+      <div class="lib-card">
+        <div class="lib-card-header">
+          <span class="lib-code">/perpustam</span>
+          <span class="status-pill status-active">Active</span>
+        </div>
+        <div class="lib-name">🔵🔴⚪ Perbadanan Perpustakaan Awam Melaka</div>
+        <div class="lib-state-engine"><span>Melaka</span> &bull; <code>WebOPAC</code></div>
+        <div class="lib-desc">Melaka state public library corporation and heritage archives.</div>
+        <a class="lib-endpoint" href="./perpustam?isbn=9789831665541">
+          GET ./perpustam?isbn=9789831665541 &rarr;
+        </a>
+      </div>
+      <!-- PPANPS Card -->
+      <div class="lib-card">
+        <div class="lib-card-header">
+          <span class="lib-code">/ppanps</span>
+          <span class="status-pill status-active">Active</span>
+        </div>
+        <div class="lib-name">🟡🔵 Perbadanan Perpustakaan Awam Negeri Perlis</div>
+        <div class="lib-state-engine"><span>Perlis</span> &bull; <code>Koha OPAC</code></div>
+        <div class="lib-desc">Perlis state public library network and border community centers.</div>
+        <a class="lib-endpoint" href="./ppanps?isbn=9789831665541">
+          GET ./ppanps?isbn=9789831665541 &rarr;
+        </a>
+      </div>
+      <!-- PUSTAKA Card -->
+      <div class="lib-card">
+        <div class="lib-card-header">
+          <span class="lib-code">/pustaka</span>
+          <span class="status-pill status-active">Active</span>
+        </div>
+        <div class="lib-name">🔴🟡⚫ Pustaka Negeri Sarawak</div>
+        <div class="lib-state-engine"><span>Sarawak</span> &bull; <code>WebOPAC</code></div>
+        <div class="lib-desc">Sarawak state library and Borneo legal deposit repository.</div>
+        <a class="lib-endpoint" href="./pustaka?isbn=9789831665541">
+          GET ./pustaka?isbn=9789831665541 &rarr;
+        </a>
+      </div>
+      <!-- PNS Card -->
+      <div class="lib-card">
+        <div class="lib-card-header">
+          <span class="lib-code">/pns</span>
+          <span class="status-pill status-active">Active</span>
+        </div>
+        <div class="lib-name">🔵⚪🔴 Perpustakaan Negeri Sabah</div>
+        <div class="lib-state-engine"><span>Sabah</span> &bull; <code>WebOPAC</code></div>
+        <div class="lib-desc">Sabah state library network and North Borneo collections.</div>
+        <a class="lib-endpoint" href="./pns?isbn=9789831665541">
+          GET ./pns?isbn=9789831665541 &rarr;
+        </a>
+      </div>
+      <!-- PKL Card -->
+      <div class="lib-card">
+        <div class="lib-card-header">
+          <span class="lib-code">/pkl</span>
+          <span class="status-pill status-active">Active</span>
+        </div>
+        <div class="lib-name">🔴⚪🔵 Perpustakaan Kuala Lumpur</div>
+        <div class="lib-state-engine"><span>W.P. Kuala Lumpur</span> &bull; <code>WebOPAC</code></div>
+        <div class="lib-desc">Kuala Lumpur metropolitan public library system under DBKL.</div>
+        <a class="lib-endpoint" href="./pkl?isbn=9789831665541">
+          GET ./pkl?isbn=9789831665541 &rarr;
+        </a>
+      </div>
+      <!-- PPJ Card -->
+      <div class="lib-card">
+        <div class="lib-card-header">
+          <span class="lib-code">/ppj</span>
+          <span class="status-pill status-active">Active</span>
+        </div>
+        <div class="lib-name">🟡🔵🔴 Perpustakaan Awam Putrajaya</div>
+        <div class="lib-state-engine"><span>W.P. Putrajaya</span> &bull; <code>WebOPAC</code></div>
+        <div class="lib-desc">Putrajaya administrative federal territory public library.</div>
+        <a class="lib-endpoint" href="./ppj?isbn=9789831665541">
+          GET ./ppj?isbn=9789831665541 &rarr;
+        </a>
+      </div>
+      <!-- PPL Card -->
+      <div class="lib-card">
+        <div class="lib-card-header">
+          <span class="lib-code">/ppl</span>
+          <span class="status-pill status-active">Active</span>
+        </div>
+        <div class="lib-name">🔴⚪🔵 Perpustakaan Awam Perbadanan Labuan</div>
+        <div class="lib-state-engine"><span>W.P. Labuan</span> &bull; <code>WebOPAC</code></div>
+        <div class="lib-desc">Federal Territory of Labuan public library corporation.</div>
+        <a class="lib-endpoint" href="./ppl?isbn=9789831665541">
+          GET ./ppl?isbn=9789831665541 &rarr;
+        </a>
+      </div>
   </div>
 
   <div class="docs-card">
     <h2>📖 Universal URL Query String API</h2>
-    <p>Retrieve MARC records for any supported library using the clean path format <code>/{library}?isbn=&lt;ISBN&gt;</code>:</p>
+    <p>Retrieve MARC records for any supported Malaysian public library using the clean path format <code>/ppl?isbn=&lt;ISBN&gt;</code>:</p>
     
     <div class="endpoint-box">
       <div>
@@ -435,7 +635,16 @@
       </div>
     </div>
 
-    <p>Append <code>&raw=true</code> for raw unstyled JSON output:</p>
+    <div class="endpoint-box">
+      <div>
+        <span class="badge-method">GET</span>
+        <a href="./ppas?isbn=9678915006" target="_blank">
+          https://pustaka-terbuka.github.io/marc-retriever/ppas?isbn=9678915006
+        </a>
+      </div>
+    </div>
+
+    <p>Append <code>&raw=true</code> for raw unstyled JSON output (ideal for machine ingestion, curl, and Python requests):</p>
     <div class="endpoint-box">
       <div>
         <span class="badge-method">GET</span>
@@ -449,8 +658,8 @@
 
 <footer>
   <p>
-    <strong>marc-retriever</strong> &bull; Powered by <a href="https://github.com/pustaka-terbuka" target="_blank" rel="noopener">Pustaka Terbuka</a>.
-    Open source on <a href="https://github.com/pustaka-terbuka/marc-retriever" target="_blank" rel="noopener">GitHub</a>.
+    Powered by <a href="https://github.com/pustaka-terbuka" target="_blank">Pustaka Terbuka</a> &bull; Open Metadata & Public Library Technology &bull;
+    <a href="https://github.com/pustaka-terbuka/marc-retriever" target="_blank">GitHub Repository</a>
   </p>
 </footer>
 
@@ -470,7 +679,7 @@
     window.location.href = `./${lib}?isbn=${encodeURIComponent(isbn)}`;
   }
 
-  // If someone accessed root with ?isbn=...&lib=pnm, forward automatically
+  // Auto-redirect if accessed at root with query string (?isbn=...&lib=...)
   window.addEventListener("DOMContentLoaded", () => {
     const params = new URLSearchParams(window.location.search);
     const isbn = params.get("isbn") || params.get("q");

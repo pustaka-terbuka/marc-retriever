@@ -3,9 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>PNM MARC Retriever - Perpustakaan Negara Malaysia</title>
-  <meta name="description" content="Retrieve MARC21 records in JSON format directly from Perpustakaan Negara Malaysia (PNM) OPAC using query string ?isbn=<ISBN>.">
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🇲🇾</text></svg>">
+  <title>Perpustakaan Negara Malaysia - MARC Retriever</title>
+  <meta name="description" content="Retrieve MARC21 records in JSON format directly from Perpustakaan Negara Malaysia (National (Malaysia)) using query string ?isbn=<ISBN>.">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📚</text></svg>">
   <style>
     :root {
       --bg-primary: #0a0e17;
@@ -43,7 +43,6 @@
       flex: 1;
     }
 
-    /* Navigation Bar */
     .nav-bar {
       display: flex;
       justify-content: space-between;
@@ -91,7 +90,7 @@
       letter-spacing: 0.03em;
     }
     h1 {
-      font-size: 2.2rem;
+      font-size: 2.1rem;
       font-weight: 800;
       color: #fff;
       letter-spacing: -0.02em;
@@ -103,11 +102,10 @@
     .subtitle {
       color: var(--text-muted);
       font-size: 1rem;
-      max-width: 650px;
+      max-width: 680px;
       margin: 0 auto;
     }
 
-    /* Search Bar */
     .search-section {
       background: var(--bg-secondary);
       border: 1px solid var(--border);
@@ -190,7 +188,6 @@
       border-color: var(--accent);
     }
 
-    /* Status Bar */
     .status-bar {
       display: none;
       align-items: center;
@@ -225,7 +222,6 @@
       color: var(--accent-rose);
     }
 
-    /* Output Section */
     .output-section {
       display: none;
       background: var(--bg-secondary);
@@ -290,7 +286,6 @@
       color: #fff;
     }
 
-    /* Code Display */
     pre.code-display {
       background: var(--bg-code);
       padding: 1.25rem;
@@ -304,14 +299,12 @@
       overflow-y: auto;
     }
 
-    /* JSON Syntax Highlighting */
     .json-key { color: #38bdf8; font-weight: 600; }
     .json-string { color: #a5f3fc; }
     .json-number { color: #f59e0b; }
     .json-boolean { color: #c084fc; font-weight: 600; }
     .json-null { color: #f43f5e; font-style: italic; }
 
-    /* API Documentation Card */
     .docs-card {
       background: var(--bg-secondary);
       border: 1px solid var(--border);
@@ -323,9 +316,6 @@
       font-size: 1.25rem;
       margin-bottom: 0.75rem;
       color: var(--accent);
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
     }
     .docs-card p {
       color: var(--text-muted);
@@ -392,6 +382,7 @@
       to { transform: rotate(360deg); }
     }
   </style>
+  <script src="../js/retriever.js"></script>
 </head>
 <body>
 
@@ -407,9 +398,9 @@
   </nav>
 
   <header>
-    <div class="badge">🇲🇾 Perpustakaan Negara Malaysia (PNM)</div>
+    <div class="badge">🇲🇾 National (Malaysia)</div>
     <h1>marc-retriever<span class="highlight"> / pnm</span></h1>
-    <p class="subtitle">Extract complete MARC21 records in JSON format directly from PNM OPAC via query string.</p>
+    <p class="subtitle">Perpustakaan Negara Malaysia</p>
   </header>
 
   <div class="search-section">
@@ -457,7 +448,7 @@
 
   <div class="docs-card">
     <h2>📖 Direct Query String Usage</h2>
-    <p>Retrieve MARC JSON records directly using the <code>/pnm?isbn=&lt;ISBN&gt;</code> route:</p>
+    <p>Retrieve MARC JSON records directly from Perpustakaan Negara Malaysia using the <code>/pnm?isbn=&lt;ISBN&gt;</code> route:</p>
     
     <div class="endpoint-box">
       <div>
@@ -468,7 +459,7 @@
       </div>
     </div>
 
-    <p>Append <code>&raw=true</code> for raw unstyled JSON output in browsers or scripts:</p>
+    <p>Append <code>&raw=true</code> for direct unstyled JSON output:</p>
     <div class="endpoint-box">
       <div>
         <span class="badge-method">GET</span>
@@ -482,208 +473,15 @@
 
 <footer>
   <p>
-    Part of <a href="../"><strong>marc-retriever</strong></a> &bull; Powered by <strong>Pustaka Terbuka</strong>.
+    Part of <a href="../"><strong>marc-retriever</strong></a> &bull; Powered by <a href="https://github.com/pustaka-terbuka" target="_blank" rel="noopener">Pustaka Terbuka</a>.
     Open source on <a href="https://github.com/pustaka-terbuka/marc-retriever" target="_blank" rel="noopener">GitHub</a>.
   </p>
 </footer>
 
 <script>
-  const API_HOST = "https://ap.iiivega.com";
-  const CUSTOMER_DOMAIN = "pnm.ap.iiivega.com";
-  const HOST_DOMAIN = "opac.pnm.gov.my";
-
+  const CURRENT_LIB_CODE = "pnm";
   let currentData = null;
   let currentView = "json";
-
-  function generateUUID() {
-    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, c => {
-      const r = Math.random() * 16 | 0;
-      return (c === 'x' ? r : (r & 0x3 | 0x8)).toString(16);
-    });
-  }
-
-  function marcToText(marc) {
-    if (!marc) return "";
-    let lines = [`=LDR  ${marc.leader || '00000nam a2200000 a 4500'}`];
-    if (marc.controlFields) {
-      Object.keys(marc.controlFields).sort().forEach(tag => {
-        marc.controlFields[tag].forEach(val => lines.push(`=${tag}  ${val}`));
-      });
-    }
-    if (marc.dataFields) {
-      Object.keys(marc.dataFields).sort().forEach(tag => {
-        marc.dataFields[tag].forEach(f => {
-          let i1 = f.ind1 === " " ? "\\" : f.ind1;
-          let i2 = f.ind2 === " " ? "\\" : f.ind2;
-          let subs = (f.subfields || []).map(s => `$${s.code}${s.value}`).join("");
-          lines.push(`=${tag}  ${i1}${i2}${subs}`);
-        });
-      });
-    }
-    return lines.join("\n");
-  }
-
-  function marcToXml(marc) {
-    if (!marc) return "";
-    let xml = `<?xml version="1.0" encoding="UTF-8"?>\n<record xmlns="http://www.loc.gov/MARC21/slim">\n`;
-    xml += `  <leader>${escapeXml(marc.leader || '')}</leader>\n`;
-    if (marc.controlFields) {
-      Object.keys(marc.controlFields).sort().forEach(tag => {
-        marc.controlFields[tag].forEach(val => {
-          xml += `  <controlfield tag="${tag}">${escapeXml(val)}</controlfield>\n`;
-        });
-      });
-    }
-    if (marc.dataFields) {
-      Object.keys(marc.dataFields).sort().forEach(tag => {
-        marc.dataFields[tag].forEach(f => {
-          xml += `  <datafield tag="${tag}" ind1="${escapeXml(f.ind1)}" ind2="${escapeXml(f.ind2)}">\n`;
-          (f.subfields || []).forEach(s => {
-            xml += `    <subfield code="${escapeXml(s.code)}">${escapeXml(s.value)}</subfield>\n`;
-          });
-          xml += `  </datafield>\n`;
-        });
-      });
-    }
-    xml += `</record>`;
-    return xml;
-  }
-
-  function escapeXml(unsafe) {
-    return (unsafe || '').replace(/[<>&'"]/g, c => ({
-      '<': '&lt;', '>': '&gt;', '&': '&amp;', '\'': '&apos;', '"': '&quot;'
-    }[c]));
-  }
-
-  function syntaxHighlightJson(json) {
-    if (typeof json !== 'string') {
-      json = JSON.stringify(json, null, 2);
-    }
-    json = json.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
-    return json.replace(/("(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(\s*:)?|\b(true|false|null)\b|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?)/g, function (match) {
-      let cls = 'json-number';
-      if (/^"/.test(match)) {
-        if (/:$/.test(match)) {
-          cls = 'json-key';
-        } else {
-          cls = 'json-string';
-        }
-      } else if (/true|false/.test(match)) {
-        cls = 'json-boolean';
-      } else if (/null/.test(match)) {
-        cls = 'json-null';
-      }
-      return '<span class="' + cls + '">' + match + '</span>';
-    });
-  }
-
-  async function fetchMarcFromPNM(isbn) {
-    const cleanIsbn = isbn.trim().replace(/[-\s]/g, "");
-    if (!cleanIsbn) throw new Error("Empty ISBN supplied");
-
-    const anonId = generateUUID();
-    const baseHeaders = {
-      "Accept": "application/json, text/plain, */*",
-      "iii-customer-domain": CUSTOMER_DOMAIN,
-      "iii-host-domain": HOST_DOMAIN,
-      "Anonymous-User-Id": anonId
-    };
-
-    // 1. Search format groups
-    const searchRes = await fetch(`${API_HOST}/api/search-result/search/format-groups`, {
-      method: "POST",
-      headers: {
-        ...baseHeaders,
-        "Content-Type": "application/json",
-        "api-version": "2"
-      },
-      body: JSON.stringify({ searchText: cleanIsbn })
-    });
-
-    if (!searchRes.ok) {
-      throw new Error(`Search request failed with HTTP ${searchRes.status}`);
-    }
-
-    const searchData = await searchRes.json();
-    const items = searchData.data || [];
-
-    if (items.length === 0) {
-      return {
-        status: "not_found",
-        library: "pnm",
-        libraryName: "Perpustakaan Negara Malaysia",
-        query: isbn,
-        cleanIsbn: cleanIsbn,
-        source: "PNM OPAC",
-        totalResults: 0,
-        records: [],
-        message: `No bibliographic records found for ISBN ${isbn} in PNM OPAC.`
-      };
-    }
-
-    const editionMap = new Map();
-    items.forEach(item => {
-      (item.materialTabs || []).forEach(tab => {
-        (tab.editions || []).forEach(ed => {
-          if (ed.id && !editionMap.has(ed.id)) {
-            editionMap.set(ed.id, {
-              editionId: ed.id,
-              recordId: ed.recordId,
-              title: item.title,
-              callNumber: ed.callNumber || "",
-              publicationDate: ed.publicationDate || item.publicationDate || "",
-              materialType: tab.name || "Book"
-            });
-          }
-        });
-      });
-    });
-
-    const editions = Array.from(editionMap.values());
-
-    // 2. Fetch MARC21 record for each edition concurrently
-    const recordPromises = editions.map(async (ed) => {
-      try {
-        const edRes = await fetch(`${API_HOST}/api/search-result/editions/${ed.editionId}`, {
-          headers: {
-            ...baseHeaders,
-            "api-version": "1"
-          }
-        });
-
-        if (!edRes.ok) return null;
-        const edData = await edRes.json();
-        const marc = edData.marcRecord;
-
-        return {
-          editionId: ed.editionId,
-          recordId: ed.recordId,
-          title: ed.title,
-          callNumber: ed.callNumber,
-          publicationDate: ed.publicationDate,
-          materialType: ed.materialType,
-          marcRecord: marc,
-          marcText: marcToText(marc),
-          marcXml: marcToXml(marc)
-        };
-      } catch (e) {
-        return null;
-      }
-    });
-
-    const fullRecords = (await Promise.all(recordPromises)).filter(Boolean);
-
-    return {
-      status: "success",
-      library: "pnm",
-      libraryName: "Perpustakaan Negara Malaysia",
-      query: isbn,
-      cleanIsbn: cleanIsbn,
-      source: "PNM OPAC",
-      totalResults: fullRecords.length,
-      records: fullRecords
-    };
-  }
 
   function showStatus(message, type = "info") {
     const el = document.getElementById("statusBar");
@@ -718,7 +516,7 @@
     } else if (currentView === "marc") {
       if (currentData.records && currentData.records.length > 0) {
         const fullMarc = currentData.records.map((r, i) => 
-          `# RECORD ${i + 1} OF ${currentData.records.length} (PNM Record ID: ${r.recordId})\n${r.marcText}`
+          `# RECORD ${i + 1} OF ${currentData.records.length} (Record ID: ${r.recordId})\n${r.marcText}`
         ).join("\n\n" + "=".repeat(60) + "\n\n");
         pre.textContent = fullMarc;
       } else {
@@ -782,7 +580,7 @@
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
     a.href = url;
-    a.download = `pnm-${isbn}.${ext}`;
+    a.download = `${CURRENT_LIB_CODE}-${isbn}.${ext}`;
     a.click();
     URL.revokeObjectURL(url);
   }
@@ -797,29 +595,29 @@
     if (!isbn) return;
 
     if (isRawMode) {
-      document.body.innerHTML = `<pre style="font-family:monospace; padding:1.5rem; background:#fff; color:#000; font-size:13px; line-height:1.5; white-space:pre-wrap; word-break:break-all;">Loading MARC data for ISBN ${escapeXml(isbn)} from PNM OPAC...</pre>`;
+      document.body.innerHTML = `<pre style="font-family:monospace; padding:1.5rem; background:#fff; color:#000; font-size:13px; line-height:1.5; white-space:pre-wrap; word-break:break-all;">Loading MARC data for ISBN ${escapeXml(isbn)}...</pre>`;
       try {
-        const result = await fetchMarcFromPNM(isbn);
+        const result = await retrieveMarc(CURRENT_LIB_CODE, isbn);
         document.body.innerHTML = `<pre style="font-family:monospace; padding:1.5rem; background:#fff; color:#000; font-size:13px; line-height:1.5; white-space:pre-wrap; word-break:break-all;">${escapeXml(JSON.stringify(result, null, 2))}</pre>`;
       } catch (err) {
-        document.body.innerHTML = `<pre style="font-family:monospace; padding:1.5rem; background:#fff; color:#f00; font-size:13px;">${escapeXml(JSON.stringify({ status: "error", library: "pnm", query: isbn, error: err.message }, null, 2))}</pre>`;
+        document.body.innerHTML = `<pre style="font-family:monospace; padding:1.5rem; background:#fff; color:#f00; font-size:13px;">${escapeXml(JSON.stringify({ status: "error", library: CURRENT_LIB_CODE, query: isbn, error: err.message }, null, 2))}</pre>`;
       }
       return;
     }
 
     document.getElementById("isbnInput").value = isbn;
     setSearchingState(true);
-    showStatus(`🔍 Retrieving MARC record for ISBN <strong>${escapeXml(isbn)}</strong> from PNM...`, "info");
+    showStatus(`🔍 Retrieving MARC record for ISBN <strong>${escapeXml(isbn)}</strong>...`, "info");
     document.getElementById("outputSection").style.display = "none";
 
     try {
-      const data = await fetchMarcFromPNM(isbn);
+      const data = await retrieveMarc(CURRENT_LIB_CODE, isbn);
       currentData = data;
 
       if (data.status === "success" && data.totalResults > 0) {
-        showStatus(`✅ Success: Found <strong>${data.totalResults}</strong> MARC record(s) from PNM OPAC.`, "success");
+        showStatus(`✅ Success: Found <strong>${data.totalResults}</strong> MARC record(s).`, "success");
       } else {
-        showStatus(`⚠️ No records found for ISBN <strong>${escapeXml(isbn)}</strong> in PNM OPAC.`, "warning");
+        showStatus(`⚠️ No records found for ISBN <strong>${escapeXml(isbn)}</strong> in this catalog.`, "warning");
       }
 
       document.getElementById("outputSection").style.display = "block";
@@ -827,7 +625,7 @@
     } catch (err) {
       currentData = {
         status: "error",
-        library: "pnm",
+        library: CURRENT_LIB_CODE,
         query: isbn,
         error: err.message
       };
