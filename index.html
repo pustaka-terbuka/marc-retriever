@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>MARC PNM - National Library of Malaysia MARC21 Lookup</title>
-  <meta name="description" content="Search books by ISBN and retrieve complete MARC21 records in JSON format directly from Perpustakaan Negara Malaysia (PNM) OPAC.">
+  <title>marc-retriever - Malaysian Libraries MARC21 Lookup Hub</title>
+  <meta name="description" content="Universal MARC21 bibliographic records retriever for Malaysian National and Public Libraries. Extract MARC JSON via simple URL query strings.">
   <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📚</text></svg>">
   <style>
     :root {
@@ -19,7 +19,6 @@
       --accent-hover: #0ea5e9;
       --accent-gold: #f59e0b;
       --accent-green: #10b981;
-      --accent-rose: #f43f5e;
       --font-mono: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier, monospace;
       --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
     }
@@ -35,18 +34,16 @@
       flex-direction: column;
     }
 
-    /* Container */
     .container {
       width: 100%;
-      max-width: 1000px;
+      max-width: 1050px;
       margin: 0 auto;
-      padding: 2rem 1.25rem 4rem;
+      padding: 2.5rem 1.25rem 4rem;
       flex: 1;
     }
 
-    /* Header */
     header {
-      margin-bottom: 2rem;
+      margin-bottom: 2.5rem;
       text-align: center;
     }
     .badge {
@@ -56,51 +53,66 @@
       background: rgba(56, 189, 248, 0.12);
       color: var(--accent);
       border: 1px solid rgba(56, 189, 248, 0.3);
-      padding: 0.25rem 0.75rem;
+      padding: 0.25rem 0.85rem;
       border-radius: 9999px;
-      font-size: 0.8rem;
+      font-size: 0.82rem;
       font-weight: 600;
       margin-bottom: 0.8rem;
-      letter-spacing: 0.03em;
     }
     h1 {
-      font-size: 2.2rem;
+      font-size: 2.5rem;
       font-weight: 800;
       color: #fff;
       letter-spacing: -0.02em;
-      margin-bottom: 0.4rem;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 0.6rem;
+      margin-bottom: 0.5rem;
     }
     h1 .highlight {
       color: var(--accent);
     }
     .subtitle {
       color: var(--text-muted);
-      font-size: 1rem;
-      max-width: 600px;
+      font-size: 1.05rem;
+      max-width: 700px;
       margin: 0 auto;
     }
 
-    /* Search Bar */
     .search-section {
       background: var(--bg-secondary);
       border: 1px solid var(--border);
-      border-radius: 14px;
-      padding: 1.25rem;
-      margin-bottom: 2rem;
-      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3);
+      border-radius: 16px;
+      padding: 1.5rem;
+      margin-bottom: 2.5rem;
+      box-shadow: 0 12px 30px -5px rgba(0, 0, 0, 0.35);
     }
     .search-form {
       display: flex;
       gap: 0.75rem;
-      margin-bottom: 0.75rem;
+      flex-wrap: wrap;
+      margin-bottom: 0.85rem;
+    }
+    .select-wrapper {
+      min-width: 260px;
+    }
+    select {
+      width: 100%;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 0.8rem 1rem;
+      color: var(--text-main);
+      font-size: 0.95rem;
+      font-weight: 600;
+      outline: none;
+      cursor: pointer;
+      transition: border-color 0.2s;
+    }
+    select:focus {
+      border-color: var(--accent);
     }
     .input-wrapper {
       position: relative;
       flex: 1;
+      min-width: 250px;
     }
     .input-wrapper input {
       width: 100%;
@@ -123,7 +135,7 @@
       color: #04121d;
       font-weight: 700;
       border: none;
-      padding: 0 1.6rem;
+      padding: 0 1.8rem;
       border-radius: 10px;
       font-size: 1rem;
       cursor: pointer;
@@ -138,12 +150,7 @@
     .search-form button:active {
       transform: scale(0.98);
     }
-    .search-form button:disabled {
-      opacity: 0.6;
-      cursor: not-allowed;
-    }
 
-    /* Quick Examples */
     .examples {
       display: flex;
       align-items: center;
@@ -168,142 +175,103 @@
       border-color: var(--accent);
     }
 
-    /* Status Bar */
-    .status-bar {
-      display: none;
+    .section-title {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 1rem;
+      display: flex;
       align-items: center;
-      gap: 0.6rem;
-      padding: 0.75rem 1rem;
-      border-radius: 8px;
-      margin-bottom: 1.5rem;
-      font-size: 0.92rem;
+      gap: 0.5rem;
     }
-    .status-bar.info {
-      display: flex;
-      background: rgba(56, 189, 248, 0.1);
-      border: 1px solid rgba(56, 189, 248, 0.25);
-      color: var(--accent);
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(310px, 1fr));
+      gap: 1.25rem;
+      margin-bottom: 2.5rem;
     }
-    .status-bar.success {
-      display: flex;
-      background: rgba(16, 185, 129, 0.1);
-      border: 1px solid rgba(16, 185, 129, 0.25);
-      color: var(--accent-green);
-    }
-    .status-bar.warning {
-      display: flex;
-      background: rgba(245, 158, 11, 0.1);
-      border: 1px solid rgba(245, 158, 11, 0.25);
-      color: var(--accent-gold);
-    }
-    .status-bar.error {
-      display: flex;
-      background: rgba(244, 63, 94, 0.1);
-      border: 1px solid rgba(244, 63, 94, 0.25);
-      color: var(--accent-rose);
-    }
-
-    /* Output Section */
-    .output-section {
-      display: none;
+    .lib-card {
       background: var(--bg-secondary);
       border: 1px solid var(--border);
-      border-radius: 14px;
-      overflow: hidden;
-      margin-bottom: 2rem;
+      border-radius: 12px;
+      padding: 1.25rem;
+      transition: border-color 0.2s, transform 0.15s;
+      position: relative;
     }
-    .output-header {
+    .lib-card:hover {
+      border-color: var(--accent);
+      transform: translateY(-2px);
+    }
+    .lib-card-header {
       display: flex;
       justify-content: space-between;
-      align-items: center;
-      background: var(--bg-card);
-      padding: 0.75rem 1.25rem;
-      border-bottom: 1px solid var(--border);
-      flex-wrap: wrap;
-      gap: 0.75rem;
+      align-items: flex-start;
+      margin-bottom: 0.6rem;
     }
-    .output-tabs {
-      display: flex;
-      gap: 0.35rem;
-    }
-    .tab-btn {
-      background: transparent;
-      border: none;
-      color: var(--text-muted);
-      padding: 0.4rem 0.8rem;
-      border-radius: 6px;
-      font-size: 0.88rem;
-      font-weight: 600;
-      cursor: pointer;
-      transition: background 0.15s, color 0.15s;
-    }
-    .tab-btn:hover {
-      color: var(--text-main);
-    }
-    .tab-btn.active {
-      background: var(--border);
-      color: var(--accent);
-    }
-    .output-actions {
-      display: flex;
-      gap: 0.5rem;
-      flex-wrap: wrap;
-    }
-    .btn-action {
-      background: var(--border);
-      color: var(--text-main);
-      border: none;
-      padding: 0.4rem 0.75rem;
-      border-radius: 6px;
-      font-size: 0.82rem;
-      font-weight: 600;
-      cursor: pointer;
-      display: inline-flex;
-      align-items: center;
-      gap: 0.35rem;
-      transition: background 0.15s, color 0.15s;
-    }
-    .btn-action:hover {
-      background: #33466f;
-      color: #fff;
-    }
-
-    /* Code Display */
-    pre.code-display {
-      background: var(--bg-code);
-      padding: 1.25rem;
+    .lib-code {
       font-family: var(--font-mono);
-      font-size: 0.88rem;
-      line-height: 1.55;
-      overflow-x: auto;
-      white-space: pre-wrap;
-      word-break: break-all;
-      max-height: 650px;
-      overflow-y: auto;
+      font-size: 0.85rem;
+      background: rgba(56, 189, 248, 0.1);
+      color: var(--accent);
+      padding: 0.15rem 0.5rem;
+      border-radius: 4px;
+      font-weight: 700;
+    }
+    .status-pill {
+      font-size: 0.75rem;
+      padding: 0.15rem 0.5rem;
+      border-radius: 9999px;
+      font-weight: 700;
+    }
+    .status-active {
+      background: rgba(16, 185, 129, 0.15);
+      color: var(--accent-green);
+      border: 1px solid rgba(16, 185, 129, 0.3);
+    }
+    .status-planned {
+      background: rgba(148, 163, 184, 0.15);
+      color: var(--text-muted);
+      border: 1px solid rgba(148, 163, 184, 0.25);
+    }
+    .lib-name {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 0.3rem;
+    }
+    .lib-desc {
+      color: var(--text-muted);
+      font-size: 0.86rem;
+      margin-bottom: 0.85rem;
+    }
+    .lib-endpoint {
+      background: var(--bg-code);
+      padding: 0.5rem 0.75rem;
+      border-radius: 6px;
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      color: var(--accent);
+      text-decoration: none;
+      display: block;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .lib-endpoint:hover {
+      text-decoration: underline;
     }
 
-    /* JSON Syntax Highlighting */
-    .json-key { color: #38bdf8; font-weight: 600; }
-    .json-string { color: #a5f3fc; }
-    .json-number { color: #f59e0b; }
-    .json-boolean { color: #c084fc; font-weight: 600; }
-    .json-null { color: #f43f5e; font-style: italic; }
-
-    /* API Documentation Card */
     .docs-card {
       background: var(--bg-secondary);
       border: 1px solid var(--border);
       border-radius: 14px;
       padding: 1.5rem;
-      margin-top: 2rem;
+      margin-bottom: 2rem;
     }
     .docs-card h2 {
       font-size: 1.25rem;
       margin-bottom: 0.75rem;
       color: var(--accent);
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
     }
     .docs-card p {
       color: var(--text-muted);
@@ -317,7 +285,7 @@
       padding: 0.75rem 1rem;
       font-family: var(--font-mono);
       font-size: 0.9rem;
-      margin-bottom: 1rem;
+      margin-bottom: 0.75rem;
       color: #38bdf8;
       display: flex;
       align-items: center;
@@ -341,7 +309,6 @@
       margin-right: 0.5rem;
     }
 
-    /* Footer */
     footer {
       border-top: 1px solid var(--border);
       text-align: center;
@@ -357,33 +324,27 @@
     footer a:hover {
       text-decoration: underline;
     }
-
-    /* Spinner */
-    .spinner {
-      display: inline-block;
-      width: 16px;
-      height: 16px;
-      border: 2px solid rgba(255,255,255,0.3);
-      border-top-color: currentColor;
-      border-radius: 50%;
-      animation: spin 0.8s linear infinite;
-    }
-    @keyframes spin {
-      to { transform: rotate(360deg); }
-    }
   </style>
 </head>
 <body>
 
 <div class="container">
   <header>
-    <div class="badge">🇲🇾 Perpustakaan Negara Malaysia (PNM)</div>
-    <h1>marc<span class="highlight">-pnm</span></h1>
-    <p class="subtitle">Query PNM's Online Public Access Catalog by ISBN and extract complete MARC21 records in JSON format.</p>
+    <div class="badge">🇲🇾 Malaysian Libraries MARC21 Engine</div>
+    <h1>marc<span class="highlight">-retriever</span></h1>
+    <p class="subtitle">Universal web retriever to extract complete MARC21 records in JSON format from Perpustakaan Negara Malaysia and Malaysian Public Libraries.</p>
   </header>
 
   <div class="search-section">
-    <form class="search-form" id="searchForm" onsubmit="handleFormSubmit(event)">
+    <form class="search-form" onsubmit="handleUniversalSearch(event)">
+      <div class="select-wrapper">
+        <select id="librarySelect">
+          <option value="pnm">🇲🇾 PNM (Perpustakaan Negara Malaysia)</option>
+          <option value="ppas" disabled>Perbadanan Perpustakaan Awam Selangor (Coming Soon)</option>
+          <option value="ppap" disabled>Perbadanan Perpustakaan Awam P. Pinang (Coming Soon)</option>
+          <option value="pustaka" disabled>Pustaka Negeri Sarawak (Coming Soon)</option>
+        </select>
+      </div>
       <div class="input-wrapper">
         <input 
           type="text" 
@@ -393,57 +354,93 @@
           autofocus 
         />
       </div>
-      <button type="submit" id="searchBtn">
-        <span id="btnIcon">🔍</span>
-        <span id="btnText">Search</span>
+      <button type="submit">
+        <span>🔍 Retrieve</span>
       </button>
     </form>
 
     <div class="examples">
-      <span>Try examples:</span>
-      <span class="example-tag" onclick="quickSearch('9789831665541')">9789831665541 (Mudahnya Sifir)</span>
-      <span class="example-tag" onclick="quickSearch('0755438140')">0755438140 (Sleepytime Stories)</span>
-      <span class="example-tag" onclick="quickSearch('9789674880000')">9789674880000</span>
+      <span>Try sample ISBNs:</span>
+      <span class="example-tag" onclick="quickFill('9789831665541')">9789831665541</span>
+      <span class="example-tag" onclick="quickFill('0755438140')">0755438140</span>
+      <span class="example-tag" onclick="quickFill('9789674880000')">9789674880000</span>
     </div>
   </div>
 
-  <div id="statusBar" class="status-bar"></div>
-
-  <div id="outputSection" class="output-section">
-    <div class="output-header">
-      <div class="output-tabs">
-        <button class="tab-btn active" id="tabJson" onclick="switchView('json')">JSON Format</button>
-        <button class="tab-btn" id="tabMarc" onclick="switchView('marc')">MarcEdit Text</button>
-        <button class="tab-btn" id="tabXml" onclick="switchView('xml')">MARCXML</button>
+  <div class="section-title">🏛️ Library Providers Directory</div>
+  <div class="grid">
+    <!-- PNM Card -->
+    <div class="lib-card">
+      <div class="lib-card-header">
+        <span class="lib-code">/pnm</span>
+        <span class="status-pill status-active">Active</span>
       </div>
-      <div class="output-actions">
-        <button class="btn-action" onclick="copyCurrentOutput()">📋 Copy</button>
-        <button class="btn-action" onclick="downloadCurrentOutput()">💾 Download</button>
-        <button class="btn-action" onclick="openRawMode()">⚡ Raw JSON</button>
-      </div>
+      <div class="lib-name">Perpustakaan Negara Malaysia</div>
+      <div class="lib-desc">National library repository powered by Vega Discover OPAC with direct client-side MARC21 extraction.</div>
+      <a class="lib-endpoint" href="./pnm?isbn=9789831665541">
+        GET ./pnm?isbn=9789831665541 &rarr;
+      </a>
     </div>
-    <pre id="codeDisplay" class="code-display"></pre>
+
+    <!-- PPAS Card -->
+    <div class="lib-card">
+      <div class="lib-card-header">
+        <span class="lib-code">/ppas</span>
+        <span class="status-pill status-planned">Planned</span>
+      </div>
+      <div class="lib-name">Perpustakaan Awam Selangor</div>
+      <div class="lib-desc">Selangor state public library network (Koha ILS integration).</div>
+      <span class="lib-endpoint" style="opacity: 0.6; cursor: default;">
+        GET ./ppas?isbn=&lt;ISBN&gt; (In Progress)
+      </span>
+    </div>
+
+    <!-- PPAP Card -->
+    <div class="lib-card">
+      <div class="lib-card-header">
+        <span class="lib-code">/ppap</span>
+        <span class="status-pill status-planned">Planned</span>
+      </div>
+      <div class="lib-name">Perpustakaan Awam P. Pinang</div>
+      <div class="lib-desc">Penang state public library consortium and community branches.</div>
+      <span class="lib-endpoint" style="opacity: 0.6; cursor: default;">
+        GET ./ppap?isbn=&lt;ISBN&gt; (In Progress)
+      </span>
+    </div>
+
+    <!-- Pustaka Sarawak Card -->
+    <div class="lib-card">
+      <div class="lib-card-header">
+        <span class="lib-code">/pustaka</span>
+        <span class="status-pill status-planned">Planned</span>
+      </div>
+      <div class="lib-name">Pustaka Negeri Sarawak</div>
+      <div class="lib-desc">Sarawak state library and legal deposit bibliographic repository.</div>
+      <span class="lib-endpoint" style="opacity: 0.6; cursor: default;">
+        GET ./pustaka?isbn=&lt;ISBN&gt; (In Progress)
+      </span>
+    </div>
   </div>
 
   <div class="docs-card">
-    <h2>📖 Query String API Usage</h2>
-    <p>You can query this web app directly via URL query parameter <code>?isbn=&lt;ISBN&gt;</code> to return the complete MARC data:</p>
+    <h2>📖 Universal URL Query String API</h2>
+    <p>Retrieve MARC records for any supported library using the clean path format <code>/{library}?isbn=&lt;ISBN&gt;</code>:</p>
     
     <div class="endpoint-box">
       <div>
         <span class="badge-method">GET</span>
-        <a id="exampleLink" href="./?isbn=9789831665541" target="_blank">
-          https://pustaka-terbuka.github.io/marc-pnm/?isbn=9789831665541
+        <a href="./pnm?isbn=9789831665541" target="_blank">
+          https://pustaka-terbuka.github.io/marc-retriever/pnm?isbn=9789831665541
         </a>
       </div>
     </div>
 
-    <p>Add <code>&raw=true</code> or <code>&raw=1</code> to receive pure, unstyled JSON in the browser:</p>
+    <p>Append <code>&raw=true</code> for raw unstyled JSON output:</p>
     <div class="endpoint-box">
       <div>
         <span class="badge-method">GET</span>
-        <a id="exampleRawLink" href="./?isbn=9789831665541&raw=true" target="_blank">
-          https://pustaka-terbuka.github.io/marc-pnm/?isbn=9789831665541&raw=true
+        <a href="./pnm?isbn=9789831665541&raw=true" target="_blank">
+          https://pustaka-terbuka.github.io/marc-retriever/pnm?isbn=9789831665541&raw=true
         </a>
       </div>
     </div>
@@ -452,405 +449,38 @@
 
 <footer>
   <p>
-    Powered by <strong>Pustaka Terbuka</strong> &bull; Direct access to 
-    <a href="https://opac.pnm.gov.my/" target="_blank" rel="noopener">Perpustakaan Negara Malaysia</a> catalog.
-    Open source on <a href="https://github.com/pustaka-terbuka/marc-pnm" target="_blank" rel="noopener">GitHub</a>.
+    <strong>marc-retriever</strong> &bull; Powered by <a href="https://github.com/pustaka-terbuka" target="_blank" rel="noopener">Pustaka Terbuka</a>.
+    Open source on <a href="https://github.com/pustaka-terbuka/marc-retriever" target="_blank" rel="noopener">GitHub</a>.
   </p>
 </footer>
 
 <script>
-  const API_HOST = "https://ap.iiivega.com";
-  const CUSTOMER_DOMAIN = "pnm.ap.iiivega.com";
-  const HOST_DOMAIN = "opac.pnm.gov.my";
-
-  let currentData = null;
-  let currentView = "json";
-
-  // UUID generator for Vega Discover headers
-  function generateUUID() {
-    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, c => {
-      const r = Math.random() * 16 | 0;
-      return (c === 'x' ? r : (r & 0x3 | 0x8)).toString(16);
-    });
-  }
-
-  // Convert MARC JSON to MarcEdit mnemonic (.mrk) text
-  function marcToText(marc) {
-    if (!marc) return "";
-    let lines = [`=LDR  ${marc.leader || '00000nam a2200000 a 4500'}`];
-    if (marc.controlFields) {
-      Object.keys(marc.controlFields).sort().forEach(tag => {
-        marc.controlFields[tag].forEach(val => lines.push(`=${tag}  ${val}`));
-      });
-    }
-    if (marc.dataFields) {
-      Object.keys(marc.dataFields).sort().forEach(tag => {
-        marc.dataFields[tag].forEach(f => {
-          let i1 = f.ind1 === " " ? "\\" : f.ind1;
-          let i2 = f.ind2 === " " ? "\\" : f.ind2;
-          let subs = (f.subfields || []).map(s => `$${s.code}${s.value}`).join("");
-          lines.push(`=${tag}  ${i1}${i2}${subs}`);
-        });
-      });
-    }
-    return lines.join("\n");
-  }
-
-  // Convert MARC JSON to MARCXML
-  function marcToXml(marc) {
-    if (!marc) return "";
-    let xml = `<?xml version="1.0" encoding="UTF-8"?>\n<record xmlns="http://www.loc.gov/MARC21/slim">\n`;
-    xml += `  <leader>${escapeXml(marc.leader || '')}</leader>\n`;
-    if (marc.controlFields) {
-      Object.keys(marc.controlFields).sort().forEach(tag => {
-        marc.controlFields[tag].forEach(val => {
-          xml += `  <controlfield tag="${tag}">${escapeXml(val)}</controlfield>\n`;
-        });
-      });
-    }
-    if (marc.dataFields) {
-      Object.keys(marc.dataFields).sort().forEach(tag => {
-        marc.dataFields[tag].forEach(f => {
-          xml += `  <datafield tag="${tag}" ind1="${escapeXml(f.ind1)}" ind2="${escapeXml(f.ind2)}">\n`;
-          (f.subfields || []).forEach(s => {
-            xml += `    <subfield code="${escapeXml(s.code)}">${escapeXml(s.value)}</subfield>\n`;
-          });
-          xml += `  </datafield>\n`;
-        });
-      });
-    }
-    xml += `</record>`;
-    return xml;
-  }
-
-  function escapeXml(unsafe) {
-    return (unsafe || '').replace(/[<>&'"]/g, c => ({
-      '<': '&lt;', '>': '&gt;', '&': '&amp;', '\'': '&apos;', '"': '&quot;'
-    }[c]));
-  }
-
-  function syntaxHighlightJson(json) {
-    if (typeof json !== 'string') {
-      json = JSON.stringify(json, null, 2);
-    }
-    json = json.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
-    return json.replace(/("(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(\s*:)?|\b(true|false|null)\b|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?)/g, function (match) {
-      let cls = 'json-number';
-      if (/^"/.test(match)) {
-        if (/:$/.test(match)) {
-          cls = 'json-key';
-        } else {
-          cls = 'json-string';
-        }
-      } else if (/true|false/.test(match)) {
-        cls = 'json-boolean';
-      } else if (/null/.test(match)) {
-        cls = 'json-null';
-      }
-      return '<span class="' + cls + '">' + match + '</span>';
-    });
-  }
-
-  // Core PNM OPAC search function
-  async function fetchMarcFromPNM(isbn) {
-    const cleanIsbn = isbn.trim().replace(/[-\s]/g, "");
-    if (!cleanIsbn) throw new Error("Empty ISBN supplied");
-
-    const anonId = generateUUID();
-    const baseHeaders = {
-      "Accept": "application/json, text/plain, */*",
-      "iii-customer-domain": CUSTOMER_DOMAIN,
-      "iii-host-domain": HOST_DOMAIN,
-      "Anonymous-User-Id": anonId
-    };
-
-    // 1. Search format groups
-    const searchRes = await fetch(`${API_HOST}/api/search-result/search/format-groups`, {
-      method: "POST",
-      headers: {
-        ...baseHeaders,
-        "Content-Type": "application/json",
-        "api-version": "2"
-      },
-      body: JSON.stringify({ searchText: cleanIsbn })
-    });
-
-    if (!searchRes.ok) {
-      throw new Error(`Search request failed with HTTP ${searchRes.status}`);
-    }
-
-    const searchData = await searchRes.json();
-    const items = searchData.data || [];
-
-    if (items.length === 0) {
-      return {
-        status: "not_found",
-        query: isbn,
-        cleanIsbn: cleanIsbn,
-        source: "Perpustakaan Negara Malaysia (PNM OPAC)",
-        totalResults: 0,
-        records: [],
-        message: `No bibliographic records found for ISBN ${isbn} in PNM OPAC.`
-      };
-    }
-
-    // Extract all unique editions
-    const editionMap = new Map();
-    items.forEach(item => {
-      (item.materialTabs || []).forEach(tab => {
-        (tab.editions || []).forEach(ed => {
-          if (ed.id && !editionMap.has(ed.id)) {
-            editionMap.set(ed.id, {
-              editionId: ed.id,
-              recordId: ed.recordId,
-              title: item.title,
-              callNumber: ed.callNumber || "",
-              publicationDate: ed.publicationDate || item.publicationDate || "",
-              materialType: tab.name || "Book"
-            });
-          }
-        });
-      });
-    });
-
-    const editions = Array.from(editionMap.values());
-
-    // 2. Fetch MARC21 record for each edition concurrently
-    const recordPromises = editions.map(async (ed) => {
-      try {
-        const edRes = await fetch(`${API_HOST}/api/search-result/editions/${ed.editionId}`, {
-          headers: {
-            ...baseHeaders,
-            "api-version": "1"
-          }
-        });
-
-        if (!edRes.ok) return null;
-        const edData = await edRes.json();
-        const marc = edData.marcRecord;
-
-        return {
-          editionId: ed.editionId,
-          recordId: ed.recordId,
-          title: ed.title,
-          callNumber: ed.callNumber,
-          publicationDate: ed.publicationDate,
-          materialType: ed.materialType,
-          marcRecord: marc,
-          marcText: marcToText(marc),
-          marcXml: marcToXml(marc)
-        };
-      } catch (e) {
-        return null;
-      }
-    });
-
-    const fullRecords = (await Promise.all(recordPromises)).filter(Boolean);
-
-    return {
-      status: "success",
-      query: isbn,
-      cleanIsbn: cleanIsbn,
-      source: "Perpustakaan Negara Malaysia (PNM OPAC)",
-      totalResults: fullRecords.length,
-      records: fullRecords
-    };
-  }
-
-  // UI Handlers
-  function showStatus(message, type = "info") {
-    const el = document.getElementById("statusBar");
-    el.className = `status-bar ${type}`;
-    el.innerHTML = message;
-  }
-
-  function hideStatus() {
-    document.getElementById("statusBar").style.display = "none";
-  }
-
-  function setSearchingState(isSearching) {
-    const btn = document.getElementById("searchBtn");
-    const icon = document.getElementById("btnIcon");
-    const text = document.getElementById("btnText");
-    btn.disabled = isSearching;
-    if (isSearching) {
-      icon.innerHTML = '<span class="spinner"></span>';
-      text.innerText = "Searching...";
-    } else {
-      icon.innerHTML = '🔍';
-      text.innerText = "Search";
-    }
-  }
-
-  function renderView() {
-    if (!currentData) return;
-    const pre = document.getElementById("codeDisplay");
-
-    if (currentView === "json") {
-      pre.innerHTML = syntaxHighlightJson(currentData);
-    } else if (currentView === "marc") {
-      if (currentData.records && currentData.records.length > 0) {
-        const fullMarc = currentData.records.map((r, i) => 
-          `# RECORD ${i + 1} OF ${currentData.records.length} (PNM Record ID: ${r.recordId})\n${r.marcText}`
-        ).join("\n\n" + "=".repeat(60) + "\n\n");
-        pre.textContent = fullMarc;
-      } else {
-        pre.textContent = "# No MARC records found.";
-      }
-    } else if (currentView === "xml") {
-      if (currentData.records && currentData.records.length > 0) {
-        const fullXml = currentData.records.map(r => r.marcXml).join("\n\n");
-        pre.textContent = fullXml;
-      } else {
-        pre.textContent = "<!-- No MARCXML records found. -->";
-      }
-    }
-  }
-
-  function switchView(view) {
-    currentView = view;
-    document.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active"));
-    if (view === "json") document.getElementById("tabJson").classList.add("active");
-    if (view === "marc") document.getElementById("tabMarc").classList.add("active");
-    if (view === "xml") document.getElementById("tabXml").classList.add("active");
-    renderView();
-  }
-
-  function copyCurrentOutput() {
-    let content = "";
-    if (currentView === "json") {
-      content = JSON.stringify(currentData, null, 2);
-    } else if (currentView === "marc") {
-      content = (currentData.records || []).map(r => r.marcText).join("\n\n");
-    } else if (currentView === "xml") {
-      content = (currentData.records || []).map(r => r.marcXml).join("\n\n");
-    }
-
-    navigator.clipboard.writeText(content).then(() => {
-      alert("Copied to clipboard!");
-    });
-  }
-
-  function downloadCurrentOutput() {
-    let content = "";
-    let ext = "json";
-    let mime = "application/json";
-    const isbn = (currentData && currentData.cleanIsbn) || "marc";
-
-    if (currentView === "json") {
-      content = JSON.stringify(currentData, null, 2);
-      ext = "json";
-      mime = "application/json";
-    } else if (currentView === "marc") {
-      content = (currentData.records || []).map(r => r.marcText).join("\n\n");
-      ext = "mrk";
-      mime = "text/plain";
-    } else if (currentView === "xml") {
-      content = (currentData.records || []).map(r => r.marcXml).join("\n\n");
-      ext = "xml";
-      mime = "application/xml";
-    }
-
-    const blob = new Blob([content], { type: mime });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = `pnm-${isbn}.${ext}`;
-    a.click();
-    URL.revokeObjectURL(url);
-  }
-
-  function openRawMode() {
-    const isbn = document.getElementById("isbnInput").value.trim();
-    if (!isbn) return;
-    window.location.search = `?isbn=${encodeURIComponent(isbn)}&raw=true`;
-  }
-
-  async function executeSearch(isbn, isRawMode = false) {
-    if (!isbn) return;
-
-    if (isRawMode) {
-      document.body.innerHTML = `<pre style="font-family:monospace; padding:1.5rem; background:#fff; color:#000; font-size:13px; line-height:1.5; white-space:pre-wrap; word-break:break-all;">Loading MARC data for ISBN ${escapeXml(isbn)} from PNM OPAC...</pre>`;
-      try {
-        const result = await fetchMarcFromPNM(isbn);
-        document.body.innerHTML = `<pre style="font-family:monospace; padding:1.5rem; background:#fff; color:#000; font-size:13px; line-height:1.5; white-space:pre-wrap; word-break:break-all;">${escapeXml(JSON.stringify(result, null, 2))}</pre>`;
-      } catch (err) {
-        document.body.innerHTML = `<pre style="font-family:monospace; padding:1.5rem; background:#fff; color:#f00; font-size:13px;">${escapeXml(JSON.stringify({ status: "error", query: isbn, error: err.message }, null, 2))}</pre>`;
-      }
-      return;
-    }
-
-    document.getElementById("isbnInput").value = isbn;
-    setSearchingState(true);
-    showStatus(`🔍 Searching PNM OPAC for ISBN <strong>${escapeXml(isbn)}</strong>...`, "info");
-    document.getElementById("outputSection").style.display = "none";
-
-    try {
-      const data = await fetchMarcFromPNM(isbn);
-      currentData = data;
-
-      if (data.status === "success" && data.totalResults > 0) {
-        showStatus(`✅ Success: Found <strong>${data.totalResults}</strong> MARC record(s) from PNM OPAC.`, "success");
-      } else {
-        showStatus(`⚠️ No records found for ISBN <strong>${escapeXml(isbn)}</strong> in PNM OPAC.`, "warning");
-      }
-
-      document.getElementById("outputSection").style.display = "block";
-      switchView("json");
-    } catch (err) {
-      currentData = {
-        status: "error",
-        query: isbn,
-        error: err.message
-      };
-      showStatus(`❌ Error fetching records: ${escapeXml(err.message)}`, "error");
-      document.getElementById("outputSection").style.display = "block";
-      switchView("json");
-    } finally {
-      setSearchingState(false);
-    }
-  }
-
-  function handleFormSubmit(e) {
+  function handleUniversalSearch(e) {
     e.preventDefault();
-    const isbn = document.getElementById("isbnInput").value.trim();
+    const lib = document.getElementById("librarySelect").value || "pnm";
+    const isbn = document.getElementById("isbnInput").value.trim().replace(/[-\s]/g, "");
     if (!isbn) return;
 
-    // Update URL query string without reloading page
-    const newUrl = `${window.location.pathname}?isbn=${encodeURIComponent(isbn)}`;
-    window.history.pushState({ isbn }, "", newUrl);
-
-    executeSearch(isbn, false);
+    window.location.href = `./${lib}?isbn=${encodeURIComponent(isbn)}`;
   }
 
-  function quickSearch(isbn) {
+  function quickFill(isbn) {
     document.getElementById("isbnInput").value = isbn;
-    const newUrl = `${window.location.pathname}?isbn=${encodeURIComponent(isbn)}`;
-    window.history.pushState({ isbn }, "", newUrl);
-    executeSearch(isbn, false);
+    const lib = document.getElementById("librarySelect").value || "pnm";
+    window.location.href = `./${lib}?isbn=${encodeURIComponent(isbn)}`;
   }
 
-  // Handle URL query string on initial load
+  // If someone accessed root with ?isbn=...&lib=pnm, forward automatically
   window.addEventListener("DOMContentLoaded", () => {
     const params = new URLSearchParams(window.location.search);
     const isbn = params.get("isbn") || params.get("q");
-    const raw = params.get("raw") === "true" || params.get("raw") === "1" || params.get("format") === "raw";
+    const lib = params.get("lib") || params.get("library") || "pnm";
+    const raw = params.get("raw");
 
     if (isbn) {
-      executeSearch(isbn, raw);
-    }
-  });
-
-  // Handle browser back/forward buttons
-  window.addEventListener("popstate", (e) => {
-    const params = new URLSearchParams(window.location.search);
-    const isbn = params.get("isbn") || params.get("q");
-    if (isbn) {
-      executeSearch(isbn, false);
-    } else {
-      document.getElementById("isbnInput").value = "";
-      document.getElementById("outputSection").style.display = "none";
-      hideStatus();
+      let target = `./${lib}?isbn=${encodeURIComponent(isbn)}`;
+      if (raw) target += `&raw=${encodeURIComponent(raw)}`;
+      window.location.replace(target);
     }
   });
 </script>

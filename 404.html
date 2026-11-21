@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Redirecting - marc-retriever</title>
+  <script>
+    // GitHub Pages SPA Fallback Router
+    (function() {
+      const path = window.location.pathname;
+      const search = window.location.search;
+      
+      // Match /marc-retriever/<library>
+      const match = path.match(/\/marc-retriever\/([a-zA-Z0-9_-]+)/);
+      if (match) {
+        const lib = match[1].toLowerCase();
+        // Redirect to /marc-retriever/<lib>/ + search
+        const base = window.location.origin + '/marc-retriever/' + lib + '/' + search;
+        window.location.replace(base);
+        return;
+      }
+      
+      // Default fallback to home
+      window.location.replace(window.location.origin + '/marc-retriever/' + search);
+    })();
+  </script>
+</head>
+<body style="background:#0a0e17; color:#94a3b8; font-family:sans-serif; text-align:center; padding:3rem;">
+  <p>Redirecting to library provider...</p>
+</body>
+</html>
