@@ -3,6 +3,7 @@ import os
 BASE_DIR = r"D:\GitHub\pustaka-terbuka\marc-retriever"
 
 LIBRARIES = [
+    ("kik", "Katalog Induk Kebangsaan", "National Union Catalog", "🇲🇾", "Union Gateway", "National Union Catalog uniting all Malaysian public, academic, and special libraries."),
     ("pnm", "Perpustakaan Negara Malaysia", "National (Malaysia)", "🇲🇾", "Vega Discover", "National library legal deposit & central bibliographic repository."),
     ("ppas", "Perbadanan Perpustakaan Awam Selangor", "Selangor", "🔴🟡", "Vega Discover", "Selangor state public library network & Raja Tun Uda central repository."),
     ("ppap", "Perbadanan Perpustakaan Awam Pulau Pinang", "Pulau Pinang", "🟡🔵", "Koha OPAC", "Penang state public library consortium and community branches."),
@@ -427,7 +428,7 @@ HTML_CONTENT = f"""<!DOCTYPE html>
 
   <div class="section-title">
     <span>🏛️ Library Providers Directory</span>
-    <span class="section-count">17 Active Providers</span>
+    <span class="section-count">18 Active Providers</span>
   </div>
   <div class="grid">
 {cards_html}
@@ -478,7 +479,7 @@ HTML_CONTENT = f"""<!DOCTYPE html>
   function handleUniversalSearch(e) {{
     e.preventDefault();
     const lib = document.getElementById("librarySelect").value || "pnm";
-    const isbn = document.getElementById("isbnInput").value.trim().replace(/[-\s]/g, "");
+    const isbn = document.getElementById("isbnInput").value.trim().replace(/[-\\s]/g, "");
     if (!isbn) return;
 
     window.location.href = `./${{lib}}?isbn=${{encodeURIComponent(isbn)}}`;
@@ -511,4 +512,4 @@ HTML_CONTENT = f"""<!DOCTYPE html>
 with open(os.path.join(BASE_DIR, "index.html"), "w", encoding="utf-8") as f:
     f.write(HTML_CONTENT)
 
-print("Updated root index.html with all 17 public libraries!")
+print("Updated root index.html with all 18 libraries (including KIK)!")

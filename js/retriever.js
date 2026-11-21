@@ -4,6 +4,16 @@
  */
 
 const LIBRARY_REGISTRY = {
+  kik: {
+    code: "kik",
+    name: "Katalog Induk Kebangsaan",
+    state: "National Union Catalog (Malaysia)",
+    type: "union",
+    status: "active",
+    customerDomain: "pnm.ap.iiivega.com",
+    hostDomain: "opac.pnm.gov.my",
+    portalUrl: "https://kik.pnm.gov.my/"
+  },
   pnm: {
     code: "pnm",
     name: "Perpustakaan Negara Malaysia",
@@ -311,7 +321,7 @@ async function retrieveMarc(libraryCode, isbn) {
   const cleanIsbn = isbn.trim().replace(/[-\s]/g, "");
   if (!cleanIsbn) throw new Error("Empty ISBN supplied");
 
-  if (lib.type === "vega") {
+  if (lib.type === "vega" || lib.type === "union") {
     return await retrieveFromVega(lib, cleanIsbn, isbn);
   } else if (lib.type === "koha") {
     return await retrieveFromKoha(lib, cleanIsbn, isbn);
@@ -323,6 +333,10 @@ async function retrieveMarc(libraryCode, isbn) {
 
 async function retrieveFromVega(lib, cleanIsbn, originalIsbn) {
   const anonId = generateUUID();
+  const sourceName = lib.code === "kik"
+    ? "Katalog Induk Kebangsaan (KIK) / National Union Catalog"
+    : `${lib.name} OPAC`;
+
   const baseHeaders = {
     "Accept": "application/json, text/plain, */*",
     "iii-customer-domain": lib.customerDomain,
@@ -349,7 +363,7 @@ async function retrieveFromVega(lib, cleanIsbn, originalIsbn) {
   const items = searchData.data || [];
 
   if (items.length === 0) {
-    if (lib.code !== "pnm") {
+    if (lib.code !== "pnm" && lib.code !== "kik") {
       return await retrieveFromFallback(lib, cleanIsbn, originalIsbn);
     }
     return {
@@ -359,7 +373,7 @@ async function retrieveFromVega(lib, cleanIsbn, originalIsbn) {
       state: lib.state,
       query: originalIsbn,
       cleanIsbn: cleanIsbn,
-      source: `${lib.name} OPAC`,
+      source: sourceName,
       totalResults: 0,
       records: [],
       message: `No bibliographic records found for ISBN ${originalIsbn} in ${lib.name} catalog.`
@@ -423,7 +437,7 @@ async function retrieveFromVega(lib, cleanIsbn, originalIsbn) {
     state: lib.state,
     query: originalIsbn,
     cleanIsbn: cleanIsbn,
-    source: `${lib.name} OPAC`,
+    source: sourceName,
     totalResults: fullRecords.length,
     records: fullRecords
   };

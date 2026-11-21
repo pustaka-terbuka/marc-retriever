@@ -353,6 +353,7 @@
     <form class="search-form" id="searchForm" onsubmit="handleUniversalSearch(event)">
       <div class="select-wrapper">
         <select id="librarySelect">
+            <option value="kik">🇲🇾 KIK - Katalog Induk Kebangsaan (National Union Catalog)</option>
             <option value="pnm">🇲🇾 PNM - Perpustakaan Negara Malaysia (National (Malaysia))</option>
             <option value="ppas">🔴🟡 PPAS - Perbadanan Perpustakaan Awam Selangor (Selangor)</option>
             <option value="ppap">🟡🔵 PPAP - Perbadanan Perpustakaan Awam Pulau Pinang (Pulau Pinang)</option>
@@ -396,9 +397,22 @@
 
   <div class="section-title">
     <span>🏛️ Library Providers Directory</span>
-    <span class="section-count">17 Active Providers</span>
+    <span class="section-count">18 Active Providers</span>
   </div>
   <div class="grid">
+      <!-- KIK Card -->
+      <div class="lib-card">
+        <div class="lib-card-header">
+          <span class="lib-code">/kik</span>
+          <span class="status-pill status-active">Active</span>
+        </div>
+        <div class="lib-name">🇲🇾 Katalog Induk Kebangsaan</div>
+        <div class="lib-state-engine"><span>National Union Catalog</span> &bull; <code>Union Gateway</code></div>
+        <div class="lib-desc">National Union Catalog uniting all Malaysian public, academic, and special libraries.</div>
+        <a class="lib-endpoint" href="./kik?isbn=9789831665541">
+          GET ./kik?isbn=9789831665541 &rarr;
+        </a>
+      </div>
       <!-- PNM Card -->
       <div class="lib-card">
         <div class="lib-card-header">

@@ -8,6 +8,7 @@ const { LIBRARY_REGISTRY, retrieveMarc } = require('../js/retriever.js');
 const TEST_ISBN = "9789831665541";
 
 const LIBRARIES_ORDER = [
+  "kik",
   "pnm",
   "ppas",
   "ppap",
@@ -32,8 +33,8 @@ async function runTestSuite() {
   console.log("  MALAYSIAN PUBLIC LIBRARIES MARC RETRIEVER - SEQUENTIAL TEST SUITE   ");
   console.log("======================================================================");
   console.log(`Test Query ISBN : ${TEST_ISBN}`);
-  console.log(`Total Providers : ${LIBRARIES_ORDER.length}`);
-  console.log(`Excluded        : kik (Katalog Induk Kebangsaan)\n`);
+  console.log(`Total Providers : ${LIBRARIES_ORDER.length} (KIK + 17 State Public Libraries)`);
+  console.log(`Union Catalog   : kik (Katalog Induk Kebangsaan)\n`);
 
   const results = [];
   let passedCount = 0;

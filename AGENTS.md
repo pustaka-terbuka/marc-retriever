@@ -10,11 +10,11 @@ Welcome to **marc-retriever** (`pustaka-terbuka/marc-retriever`). This document 
 * **Organization**: [Pustaka Terbuka](https://github.com/pustaka-terbuka)
 * **Live Deployment**: [https://pustaka-terbuka.github.io/marc-retriever/](https://pustaka-terbuka.github.io/marc-retriever/)
 * **Repository**: [https://github.com/pustaka-terbuka/marc-retriever](https://github.com/pustaka-terbuka/marc-retriever)
-* **Core Function**: Universal web retriever to extract complete **MARC21 bibliographic records** in structured JSON format from Perpustakaan Negara Malaysia (PNM) and all 16 Malaysian State and Federal Territory Public Libraries via clean URL query strings.
+* **Core Function**: Universal web retriever to extract complete **MARC21 bibliographic records** in structured JSON format from Katalog Induk Kebangsaan (KIK), Perpustakaan Negara Malaysia (PNM), and all 16 Malaysian State and Federal Territory Public Libraries via clean URL query strings.
 * **Target Clean Routes**:
   - `https://pustaka-terbuka.github.io/marc-retriever/{code}?isbn=<ISBN>`
   - Append `&raw=true` for machine-friendly raw JSON output.
-* **Excluded Catalog**: `kik` (Katalog Induk Kebangsaan / National Union Catalog) is excluded from this implementation per explicit specification.
+* **National Union Catalog**: `kik` (Katalog Induk Kebangsaan) serves as the unified national union endpoint.
 
 ---
 
@@ -22,13 +22,13 @@ Welcome to **marc-retriever** (`pustaka-terbuka/marc-retriever`). This document 
 
 1. **Zero External Runtime Dependencies**: Static HTML5, CSS3, and ES6+ JavaScript. No build steps, no Node bundlers (Vite/Webpack), no external CSS frameworks.
 2. **Provider Modular Routing**:
-   - Central Hub: `index.html` (portal, provider selector, and provider directory cards).
-   - Dedicated Library Endpoints: Each of the 17 providers resides in its own physical directory (`{code}/index.html`) so GitHub Pages serves `/{code}?isbn=...` natively without 404s.
+   - Central Hub: `index.html` (portal, provider selector, and provider directory cards for all 18 providers).
+   - Dedicated Library Endpoints: Each of the 18 providers resides in its own physical directory (`{code}/index.html`) so GitHub Pages serves `/{code}?isbn=...` natively without 404s.
    - SPA Fallback Router: `404.html` dynamically parses path segments (`/<library>?isbn=...`) and reroutes seamlessly to the matching provider.
 3. **Dual-Tier Resolution**:
-   - **Direct Vega Cloud APIs** (`pnm`, `ppas`): Directly queries public Clarivate Vega Discover Cloud APIs (`https://ap.iiivega.com`) with client-side CORS headers.
+   - **Direct Vega Cloud APIs** (`kik`, `pnm`, `ppas`): Directly queries public Clarivate Vega Discover Cloud APIs (`https://ap.iiivega.com`) with client-side CORS headers.
    - **On-Premise Koha & WebOPAC Portals**: Koha OPAC endpoints (`ppap`, `ppanpk`, `ppank`, `ppanps`) and WebOPAC portals (`ppanj`, `ppak`, `ppat`, `ppaph`, `ppans`, `perpustam`, `pustaka`, `pns`, `pkl`, `ppj`, `ppl`).
-   - **Automatic National Legal Deposit Fallback**: If a local branch does not hold an item or if browser CORS blocks on-premise servers, records are resolved via the central legal deposit index (PNM) with clear provenance metadata (`resolvedVia: "National Central Index (PNM)"`, `holdingInLibrary: false`).
+   - **Automatic National Legal Deposit Fallback**: If a local branch does not hold an item or if browser CORS blocks on-premise servers, records are resolved via the central legal deposit index (PNM/KIK) with clear provenance metadata (`resolvedVia: "National Central Index (PNM)"`, `holdingInLibrary: false`).
 4. **Multi-Format In-Memory Exporter**: Automatically parses and exports records into:
    - Structured JSON schema (`records[].marcRecord`)
    - MarcEdit tagged text (`records[].marcText`, `.mrk`)
@@ -52,8 +52,9 @@ D:/GitHub/pustaka-terbuka/marc-retriever/
 ├── tools/
 │   ├── generate_providers.py  # Generates dedicated {code}/index.html provider pages
 │   ├── update_hub_index.py    # Updates hub index.html with all active cards
-│   └── test_all_providers.js  # Automated sequential test runner for all 17 libraries
-└── {code}/                    # 17 Dedicated provider directories
+│   └── test_all_providers.js  # Automated sequential test runner for all 18 providers
+└── {code}/                    # 18 Dedicated provider directories
+    ├── kik/index.html         # Katalog Induk Kebangsaan (National Union Catalog)
     ├── pnm/index.html         # Perpustakaan Negara Malaysia
     ├── ppas/index.html        # Perbadanan Perpustakaan Awam Selangor
     ├── ppap/index.html        # Perbadanan Perpustakaan Awam Pulau Pinang
@@ -79,23 +80,24 @@ D:/GitHub/pustaka-terbuka/marc-retriever/
 
 | # | Code | Library Name | State / Territory | Engine Type | Direct URL / Portal |
 | :---: | :--- | :--- | :--- | :--- | :--- |
-| 1 | `pnm` | Perpustakaan Negara Malaysia | National (Malaysia) | Vega Discover | `https://opac.pnm.gov.my/` |
-| 2 | `ppas` | Perbadanan Perpustakaan Awam Selangor | Selangor | Vega Discover | `https://ppas.ap.iiivega.com/` |
-| 3 | `ppap` | Perbadanan Perpustakaan Awam Pulau Pinang | Pulau Pinang | Koha OPAC | `https://opac.penanglib.gov.my` |
-| 4 | `ppanj` | Perbadanan Perpustakaan Awam Negeri Johor | Johor | WebOPAC | `https://ppaj.johor.gov.my` |
-| 5 | `ppanpk` | Perbadanan Perpustakaan Awam Negeri Perak | Perak | Koha OPAC | `https://opac.ppanpk.gov.my` |
-| 6 | `ppank` | Perbadanan Perpustakaan Awam Negeri Kedah | Kedah | Koha OPAC | `http://opac.kedahlib.gov.my` |
-| 7 | `ppak` | Perbadanan Perpustakaan Awam Kelantan | Kelantan | WebOPAC | `https://www.kelantanlibrary.gov.my` |
-| 8 | `ppat` | Perbadanan Perpustakaan Awam Terengganu | Terengganu | WebOPAC | `https://www.trglib.gov.my` |
-| 9 | `ppaph` | Perbadanan Perpustakaan Awam Pahang | Pahang | WebOPAC | `https://pahanglibrary.gov.my` |
-| 10 | `ppans` | Perbadanan Perpustakaan Awam Negeri Sembilan | Negeri Sembilan | WebOPAC | `https://www.nslibrary.gov.my` |
-| 11 | `perpustam` | Perbadanan Perpustakaan Awam Melaka | Melaka | WebOPAC | `https://perpustam.gov.my` |
-| 12 | `ppanps` | Perbadanan Perpustakaan Awam Negeri Perlis | Perlis | Koha OPAC | `http://opac.perlislib.gov.my` |
-| 13 | `pustaka` | Pustaka Negeri Sarawak | Sarawak | WebOPAC | `https://www.pustaka-sarawak.com` |
-| 14 | `pns` | Perpustakaan Negeri Sabah | Sabah | WebOPAC | `https://library.sabah.gov.my` |
-| 15 | `pkl` | Perpustakaan Kuala Lumpur | W.P. Kuala Lumpur | WebOPAC | `https://www.dbkl.gov.my` |
-| 16 | `ppj` | Perpustakaan Awam Putrajaya | W.P. Putrajaya | WebOPAC | `https://library.ppj.gov.my` |
-| 17 | `ppl` | Perpustakaan Awam Perbadanan Labuan | W.P. Labuan | WebOPAC | `https://www.pl.gov.my` |
+| 1 | `kik` | Katalog Induk Kebangsaan | National Union Catalog | Union Gateway | `https://kik.pnm.gov.my/` |
+| 2 | `pnm` | Perpustakaan Negara Malaysia | National (Malaysia) | Vega Discover | `https://opac.pnm.gov.my/` |
+| 3 | `ppas` | Perbadanan Perpustakaan Awam Selangor | Selangor | Vega Discover | `https://ppas.ap.iiivega.com/` |
+| 4 | `ppap` | Perbadanan Perpustakaan Awam Pulau Pinang | Pulau Pinang | Koha OPAC | `https://opac.penanglib.gov.my` |
+| 5 | `ppanj` | Perbadanan Perpustakaan Awam Negeri Johor | Johor | WebOPAC | `https://ppaj.johor.gov.my` |
+| 6 | `ppanpk` | Perbadanan Perpustakaan Awam Negeri Perak | Perak | Koha OPAC | `https://opac.ppanpk.gov.my` |
+| 7 | `ppank` | Perbadanan Perpustakaan Awam Negeri Kedah | Kedah | Koha OPAC | `http://opac.kedahlib.gov.my` |
+| 8 | `ppak` | Perbadanan Perpustakaan Awam Kelantan | Kelantan | WebOPAC | `https://www.kelantanlibrary.gov.my` |
+| 9 | `ppat` | Perbadanan Perpustakaan Awam Terengganu | Terengganu | WebOPAC | `https://www.trglib.gov.my` |
+| 10 | `ppaph` | Perbadanan Perpustakaan Awam Pahang | Pahang | WebOPAC | `https://pahanglibrary.gov.my` |
+| 11 | `ppans` | Perbadanan Perpustakaan Awam Negeri Sembilan | Negeri Sembilan | WebOPAC | `https://www.nslibrary.gov.my` |
+| 12 | `perpustam` | Perbadanan Perpustakaan Awam Melaka | Melaka | WebOPAC | `https://perpustam.gov.my` |
+| 13 | `ppanps` | Perbadanan Perpustakaan Awam Negeri Perlis | Perlis | Koha OPAC | `http://opac.perlislib.gov.my` |
+| 14 | `pustaka` | Pustaka Negeri Sarawak | Sarawak | WebOPAC | `https://www.pustaka-sarawak.com` |
+| 15 | `pns` | Perpustakaan Negeri Sabah | Sabah | WebOPAC | `https://library.sabah.gov.my` |
+| 16 | `pkl` | Perpustakaan Kuala Lumpur | W.P. Kuala Lumpur | WebOPAC | `https://www.dbkl.gov.my` |
+| 17 | `ppj` | Perpustakaan Awam Putrajaya | W.P. Putrajaya | WebOPAC | `https://library.ppj.gov.my` |
+| 18 | `ppl` | Perpustakaan Awam Perbadanan Labuan | W.P. Labuan | WebOPAC | `https://www.pl.gov.my` |
 
 ---
 
@@ -111,7 +113,7 @@ D:/GitHub/pustaka-terbuka/marc-retriever/
      ```bash
      node tools/test_all_providers.js
      ```
-   - Ensure all 17 public libraries pass verification with valid MARC21 JSON, `.mrk`, and MARCXML structures.
+   - Ensure all 18 library providers pass verification with valid MARC21 JSON, `.mrk`, and MARCXML structures.
 5. **Generator Scripts**:
-   - If provider HTML templates are modified, re-run `python tools/generate_providers.py` to regenerate all 17 directories consistently.
+   - If provider HTML templates are modified, re-run `python tools/generate_providers.py` to regenerate all 18 directories consistently.
    - If provider cards or registry entries are updated, re-run `python tools/update_hub_index.py` to keep the root hub in sync.

@@ -1,6 +1,7 @@
 import os
 
 LIBRARIES = [
+    ("kik", "Katalog Induk Kebangsaan", "National Union Catalog", "🇲🇾"),
     ("pnm", "Perpustakaan Negara Malaysia", "National (Malaysia)", "🇲🇾"),
     ("ppas", "Perbadanan Perpustakaan Awam Selangor", "Selangor", "🔴🟡"),
     ("ppap", "Perbadanan Perpustakaan Awam Pulau Pinang", "Pulau Pinang", "🟡🔵"),
